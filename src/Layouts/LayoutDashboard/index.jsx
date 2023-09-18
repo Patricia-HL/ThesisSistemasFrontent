@@ -1,62 +1,88 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Drawer from '@mui/material/Drawer';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Divider, Typography, Grid, Box, useTheme } from '@mui/material';
+import CustomDrawer from '../../components/shared/CustomDrawer';
 import SidebarItems from '../../components/shared/SidebarItems';
-import Divider from '@mui/material/Divider';
-import { Box, Grid } from '@mui/material';
+import { useStyles } from './layout_dashboard.styles';
+import { getCustomStyles } from './layout_dashboard.styles';
+import ReusableAppBar from '../../components/common/ReusableAppBar';
 
-const LayoutDashboard = ({ privateRoutes }) => {
+const findCurrentRoute = (routes, pathname) => {
+  for (const route of routes) {
+    if (route.route === pathname) {
+      return route.name;
+    }
+    if (route.collapse) {
+      const found = findCurrentRoute(route.collapse, pathname);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
+};
+
+const LayoutDashboard = ({ isAuthenticated, privateRoutes, children }) => {
+  const Theme = useTheme();
+  const customStyles = getCustomStyles(Theme);
+  const location = useLocation();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState('');
+
+  useEffect(() => {
+    const currentRoute = findCurrentRoute(privateRoutes, location.pathname);
+
+    if (currentRoute) {
+      setCurrentPage(currentRoute);
+    } else {
+      setCurrentPage('Route Not Found');
+    }
+
+    // Cerrar el drawer cuando se selecciona una ruta del SidebarItems
+    setIsDrawerOpen(false);
+  }, [location.pathname, privateRoutes]);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
   return (
-    <Box>
-      {' '}
-      {/* <Box style={{ height: '100vh', with: '100%', margin: '0' }}>*/}
-      <AppBar position='fixed'>
-        <Toolbar>
-          <IconButton
-            edge='start'
-            color='inherit'
-            aria-label='menu'
-            onClick={toggleDrawer}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant='h6' sx={{ flexGrow: 1 }}>
-            Belcorp Potosí
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer anchor='left' open={isDrawerOpen} onClose={toggleDrawer}>
-        <Grid container style={{ justifyContent: 'center', margin: '1rem' }}>
-          {/* Aquí colocamos el logo o cualquier otro contenido */}
-          {/*<Box
-            component='img'
-            src='/path/to/your/logo.png'
-            alt='Logo'
-            style={{ width: '100px', marginBottom: '16px' }}
-          />
-*/}
-          {/* Aquí colocamos el texto con Typography */}
-          <Typography variant='h6' gutterBottom>
-            Belcorp Potosí
-          </Typography>
-          {/* Agregamos un Divider para separar el logo y el texto */}
-        </Grid>
-        <Divider />
-        {/* A continuación, mostramos el componente SidebarItems */}
-        <SidebarItems items={privateRoutes} />
-      </Drawer>
-      {/* Content */}
+    <Box style={customStyles.root}>
+      <ReusableAppBar
+        onMenuButtonClick={toggleDrawer}
+        buttonPosition='right'
+        showLogoutButton={true}
+        showTitle={false} // Mostrar el título en el AppBar
+        position='start' // El ReusableAppBar se mostrará a la izquierda en el LayoutDashboard
+        // appBar={customStyles.appBar}
+      />
+      <CustomDrawer
+        drawerStyle={customStyles.drawer} // Estilo personalizado del Drawer
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        isPermanent={true}
+        items={
+          <React.Fragment>
+            <Grid
+              container
+              style={{ justifyContent: 'center', margin: '0.7rem' }}
+            >
+              <Typography
+                variant='h6'
+                gutterBottom
+              >
+                Perfil
+              </Typography>
+            </Grid>
+            <Divider />
+            <SidebarItems
+              items={isAuthenticated ? privateRoutes : []}
+              onItemClick={() => setIsDrawerOpen(false)}
+            />
+          </React.Fragment>
+        }
+      />
+      {children}
     </Box>
   );
 };
