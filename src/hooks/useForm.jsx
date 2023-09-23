@@ -10,6 +10,10 @@ const useForm = (initialValues, validationRules) => {
       ...values,
       [name]: value,
     });
+
+    if (validationRules[name]) {
+      validateField(name, value);
+    }
   };
 
   const validateField = (name, value) => {
@@ -22,24 +26,17 @@ const useForm = (initialValues, validationRules) => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    for (const name in values) {
-      validateField(name, values[name]);
-    }
-
-    if (Object.keys(errors).length === 0) {
-      // Realiza la acción de envío del formulario aquí
-      // Por ejemplo, dispatch de una acción de Redux o llamada a una API
-    }
+  const reset = () => {
+    setValues(initialValues);
+    setErrors({});
   };
 
   return {
     values,
     errors,
     handleChange,
-    handleSubmit,
+
+    reset, // Agrega la función reset
   };
 };
 

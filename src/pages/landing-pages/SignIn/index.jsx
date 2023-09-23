@@ -1,91 +1,86 @@
-import React, { useState } from 'react';
-import { Box, Avatar, Grid } from '@mui/material';
+import React from 'react';
+import { Box, Avatar, Grid, Paper, TextField, Button } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PageBody from '../../../components/common/PageBody';
-import ReusablePaper from '../../../components/common/ReusablePaper';
-import ReusableTextField from '../../../components/common/TextField';
 import useNavigate from '../../../hooks/useNavigate';
-import { containerStyle } from './signin.styles';
-import ReusableButton from '../../../components/common/Button';
-import { useDispatch } from 'react-redux'; // Importa useDispatch de react-redux
+import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../redux/authActions/loginActions';
+import useForm from '../../../hooks/useForm';
 
-const SignIn = ({ toggleAuthentication }) => {
-  const dispatch = useDispatch(); // Obtiene la función dispatch desde Redux
-
+const SignIn = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [dniOrCellNumber, setDniOrCellNumber] = useState('');
-  const [password, setPassword] = useState('');
+  const validationRules = {
+    dniOrCellNumber: (value) =>
+      value.trim() === '' ? 'Este campo es obligatorio' : null,
+    password: (value) =>
+      value.trim() === '' ? 'Este campo es obligatorio' : null,
+  };
 
-  const handleSignIn = async () => {
-    // Llama a la acción loginUser para iniciar sesión
+  const { values, errors, handleChange } = useForm(
+    { dniOrCellNumber: '', password: '' },
+    validationRules
+  );
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const credentials = {
-      dni: dniOrCellNumber,
-      password,
+      dni: values.dniOrCellNumber,
+      password: values.password,
     };
 
     try {
       await dispatch(loginUser(credentials));
-
-      // Si la autenticación es exitosa, puedes realizar acciones adicionales aquí
-      // Por ejemplo, navegar a una página diferente
       navigate('/dashboard');
     } catch (error) {
-      // Maneja cualquier error que pueda ocurrir durante la autenticación
       console.error('Error durante la autenticación:', error);
     }
   };
 
   return (
     <PageBody>
-      <Box style={containerStyle.root}>
-        <ReusablePaper style={containerStyle.paperStyle}>
-          <Grid
-            container
-            style={containerStyle.paper_content}
-          >
-            <Grid item>
-              <Avatar style={containerStyle.avatarStyle}>
-                <LockOutlinedIcon />
-              </Avatar>
-            </Grid>
-            <Grid item>
-              <Grid
-                container
-                style={containerStyle.formStyle}
-              >
-                <ReusableTextField
-                  label='Documento de Identidad  o Celular'
-                  variant='outlined'
-                  value={dniOrCellNumber}
-                  onChange={(e) => setDniOrCellNumber(e.target.value)}
-                  style={containerStyle.inputStyle}
-                  required
-                />
-
-                <ReusableTextField
-                  label='Contraseña'
-                  variant='outlined'
-                  type='password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  style={containerStyle.inputStyle}
-                  required
-                />
-
-                <ReusableButton
-                  variant='contained'
-                  type='submit'
-                  onClick={handleSignIn}
-                  style={containerStyle.buttonStyle}
-                >
-                  Iniciar sesión
-                </ReusableButton>
-              </Grid>
-            </Grid>
+      <Box component={Paper}>
+        <Grid container>
+          <Grid item>
+            <Avatar>
+              <LockOutlinedIcon />
+            </Avatar>
           </Grid>
-        </ReusablePaper>
+          <Grid item>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                label='Documento de Identidad o Celular'
+                variant='outlined'
+                name='dniOrCellNumber'
+                value={values.dniOrCellNumber}
+                onChange={handleChange}
+                helperText={errors.dniOrCellNumber}
+                error={Boolean(errors.dniOrCellNumber)}
+                required
+              />
+
+              <TextField
+                label='Contraseña'
+                variant='outlined'
+                type='password'
+                name='password'
+                value={values.password}
+                onChange={handleChange}
+                helperText={errors.password}
+                error={Boolean(errors.password)}
+                required
+              />
+
+              <Button
+                variant='contained'
+                type='submit'
+              >
+                Iniciar sesión
+              </Button>
+            </form>
+          </Grid>
+        </Grid>
       </Box>
     </PageBody>
   );
