@@ -3,25 +3,39 @@ import { Box, Avatar, Grid } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PageBody from '../../../components/common/PageBody';
 import ReusablePaper from '../../../components/common/ReusablePaper';
-import ReusableTextField from '../../../components/common/TextField'; // Importa tu componente ReusableTextField
-import useNavigate from '../../../hooks/useNavigate'; // Importa tu hook useNavigate
+import ReusableTextField from '../../../components/common/TextField';
+import useNavigate from '../../../hooks/useNavigate';
 import { containerStyle } from './signin.styles';
 import ReusableButton from '../../../components/common/Button';
+import { useDispatch } from 'react-redux'; // Importa useDispatch de react-redux
+import { loginUser } from '../../../redux/authActions/loginActions';
 
 const SignIn = ({ toggleAuthentication }) => {
-  const navigate = useNavigate(); // Usa el hook useNavigate
+  const dispatch = useDispatch(); // Obtiene la función dispatch desde Redux
 
-  // Estados para almacenar los valores de los campos de texto
+  const navigate = useNavigate();
+
   const [dniOrCellNumber, setDniOrCellNumber] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = () => {
-    // Aquí puedes agregar la lógica real de autenticación
-    // Por ahora, simplemente llamaremos a la función toggleAuthentication para establecer isAuthenticated en true.
-    toggleAuthentication(true);
+  const handleSignIn = async () => {
+    // Llama a la acción loginUser para iniciar sesión
+    const credentials = {
+      dni: dniOrCellNumber,
+      password,
+    };
 
-    // Después de la autenticación exitosa, navega a la ruta '/dashboard'
-    navigate('/dashboard');
+    try {
+      await dispatch(loginUser(credentials));
+
+      // Si la autenticación es exitosa, puedes realizar acciones adicionales aquí
+      // Por ejemplo, navegar a una página diferente
+      navigate('/dashboard');
+
+    } catch (error) {
+      // Maneja cualquier error que pueda ocurrir durante la autenticación
+      console.error('Error durante la autenticación:', error);
+    }
   };
 
   return (
@@ -43,11 +57,13 @@ const SignIn = ({ toggleAuthentication }) => {
                 style={containerStyle.formStyle}
               >
                 <ReusableTextField
-                  label='DNI o Celular'
+                  label='Documento de Identidad  o Celular'
                   variant='outlined'
                   value={dniOrCellNumber}
                   onChange={(e) => setDniOrCellNumber(e.target.value)}
                   style={containerStyle.inputStyle}
+                  required
+       
                 />
 
                 <ReusableTextField
@@ -57,6 +73,8 @@ const SignIn = ({ toggleAuthentication }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   style={containerStyle.inputStyle}
+                  required
+         
                 />
 
                 <ReusableButton
@@ -64,6 +82,7 @@ const SignIn = ({ toggleAuthentication }) => {
                   type='submit'
                   onClick={handleSignIn}
                   style={containerStyle.buttonStyle}
+
                 >
                   Iniciar sesión
                 </ReusableButton>

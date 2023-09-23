@@ -19,7 +19,7 @@ const Footer = () => {
             variant='h6'
             className={classes.title_footer}
           >
-            Copyright Sandra Copyright
+            Copyright2023
           </Typography>
         </Grid>
         <Grid

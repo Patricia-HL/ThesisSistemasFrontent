@@ -1,12 +1,11 @@
-// App.js
-
-import React, { useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
 } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // Importa useSelector de react-redux
 import LayoutPage from './Layouts/LayoutPage';
 import LayoutDashboard from './Layouts/LayoutDashboard';
 import { publicRoutes, privateRoutes } from './routes';
@@ -29,11 +28,7 @@ const renderRoutes = (routes) => {
 };
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-  const toggleAuthentication = () => {
-    setIsAuthenticated((prevIsAuthenticated) => !prevIsAuthenticated);
-  };
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Obtiene el estado de autenticación desde Redux
 
   return (
     <Router>

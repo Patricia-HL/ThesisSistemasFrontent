@@ -1,6 +1,6 @@
 // ReusableAppBar.js
 import React from 'react';
-import { Link } from 'react-router-dom';
+
 import { useHistory } from 'react-router-dom';
 
 import {
@@ -17,7 +17,8 @@ import { Typography, Box } from '@mui/material';
 import ReusableButton from '../Button';
 import { publicRoutes } from '././../../../routes';
 import CollapsiblePopover from '../CollapsiblePopover';
-import ButtonGroup from '../ButtonGroup';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../redux/authActions/loginActions';
 import { getCustomStyles } from './reusable_appbar.styles'; // Importa la función getCustomStyles
 const ReusableAppBar = ({
   onMenuButtonClick,
@@ -33,7 +34,11 @@ const ReusableAppBar = ({
   const theme = useTheme(); // Accede al tema global
   const customStyles = getCustomStyles(theme); // Obtén los estilos personalizados
   const history = useHistory();
+  const dispatch = useDispatch();
 
+  const handleLogout = () => {
+    dispatch(logout()); // Dispara la acción de logout
+  };
   const handleButtonClick = (item) => {
     // Realizar acciones adicionales si es necesario
     // ...
@@ -95,7 +100,10 @@ const ReusableAppBar = ({
             ))}
         </Hidden>{' '}
         {showLogoutButton && (
-          <ReusableButton style={customStyles.btnlogout}>
+          <ReusableButton
+            style={customStyles.btnlogout}
+            onClick={handleLogout}
+          >
             Cerrar Sesión
           </ReusableButton>
         )}

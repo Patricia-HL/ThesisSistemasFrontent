@@ -38,18 +38,6 @@ const publicRoutes = [
     name: 'Sobre Nosotros',
     route: '/about-us',
     component: AboutUs,
-    collapse: [
-      {
-        name: 'Registrar',
-        route: '/register-permision',
-        component: PermisionRegister,
-      },
-      {
-        name: 'Listar',
-        route: '/list-permision',
-        component: PermisionList,
-      },
-    ],
   },
   {
     name: 'Belleza Intelectual',
