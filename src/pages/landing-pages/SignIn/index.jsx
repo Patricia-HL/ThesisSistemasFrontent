@@ -31,7 +31,6 @@ const SignIn = ({ toggleAuthentication }) => {
       // Si la autenticación es exitosa, puedes realizar acciones adicionales aquí
       // Por ejemplo, navegar a una página diferente
       navigate('/dashboard');
-
     } catch (error) {
       // Maneja cualquier error que pueda ocurrir durante la autenticación
       console.error('Error durante la autenticación:', error);
@@ -63,7 +62,6 @@ const SignIn = ({ toggleAuthentication }) => {
                   onChange={(e) => setDniOrCellNumber(e.target.value)}
                   style={containerStyle.inputStyle}
                   required
-       
                 />
 
                 <ReusableTextField
@@ -74,7 +72,6 @@ const SignIn = ({ toggleAuthentication }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   style={containerStyle.inputStyle}
                   required
-         
                 />
 
                 <ReusableButton
@@ -82,7 +79,6 @@ const SignIn = ({ toggleAuthentication }) => {
                   type='submit'
                   onClick={handleSignIn}
                   style={containerStyle.buttonStyle}
-
                 >
                   Iniciar sesión
                 </ReusableButton>

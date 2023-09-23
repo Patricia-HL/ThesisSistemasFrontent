@@ -102,7 +102,7 @@ const publicRoutes = [
 
 const privateRoutes = [
   {
-    name: 'Principal',
+    name: 'Inicio',
     route: '/dashboard',
     component: Main,
   },
@@ -110,6 +110,7 @@ const privateRoutes = [
     name: 'Permiso',
     columns: 1,
     rowsPerColumn: 2,
+    roles: ['Administrador'],
     collapse: [
       {
         name: 'Registrar',
@@ -127,6 +128,7 @@ const privateRoutes = [
     name: 'Rol',
     columns: 1,
     rowsPerColumn: 2,
+    roles: ['Administrador'],
     collapse: [
       {
         name: 'Registrar',
@@ -144,6 +146,7 @@ const privateRoutes = [
     name: 'Administrador',
     columns: 1,
     rowsPerColumn: 2,
+    roles: ['Administrador'],
     collapse: [
       {
         name: 'Registrar',
@@ -161,6 +164,7 @@ const privateRoutes = [
     name: 'Gerencia',
     columns: 1,
     rowsPerColumn: 2,
+    roles: ['Administrador'],
     collapse: [
       {
         name: 'Registrar',
@@ -178,6 +182,7 @@ const privateRoutes = [
     name: 'Lider Empresa',
     columns: 1,
     rowsPerColumn: 2,
+    roles: ['Gerente'],
     collapse: [
       {
         name: 'Seccion',
@@ -216,6 +221,7 @@ const privateRoutes = [
     name: 'Consultoria',
     columns: 1,
     rowsPerColumn: 2,
+    roles: ['Lider', 'Gerente'],
     collapse: [
       {
         name: 'Registrar',
@@ -233,6 +239,7 @@ const privateRoutes = [
     name: 'Pegs',
     columns: 1,
     rowsPerColumn: 2,
+    roles: ['Lider, Gerente'],
     collapse: [
       {
         name: 'Registrar',
@@ -250,6 +257,7 @@ const privateRoutes = [
     name: 'Servicios',
     columns: 1,
     rowsPerColumn: 2,
+    roles: ['Lider', 'Gerente'],
     collapse: [
       {
         name: 'Conferencias',
@@ -270,12 +278,14 @@ const privateRoutes = [
         name: 'Comunicados',
         route: '/comunicados',
         component: Comunicados,
+        roles: ['Lider,', 'Gerente', 'Consultoria', 'Pegs'],
       },
     ],
   },
   {
     name: 'Seguimiento de Actividades',
     route: '/seguimiento-de-actividades',
+    roles: ['Gerente'],
     component: SeguimientoActividades,
   },
 ];

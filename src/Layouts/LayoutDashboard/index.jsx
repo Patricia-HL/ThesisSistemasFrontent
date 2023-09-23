@@ -1,3 +1,4 @@
+// LayoutDashboard.js
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Divider, Typography, Grid, Box, useTheme } from '@mui/material';
@@ -76,7 +77,7 @@ const LayoutDashboard = ({ isAuthenticated, privateRoutes, children }) => {
             </Grid>
             <Divider />
             <SidebarItems
-              items={isAuthenticated ? privateRoutes : []}
+              items={privateRoutes} // Pasa las rutas privadas a SidebarItems
               onItemClick={() => setIsDrawerOpen(false)}
             />
           </React.Fragment>

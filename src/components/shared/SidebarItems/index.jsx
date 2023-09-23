@@ -17,15 +17,39 @@ import { getCustomStyles } from './sidebar_items.styles';
 const SidebarItems = ({
   items,
   history,
-  sidebarStyle, // Accede al estilo personalizado del componente Sidebar
-  listStyle, // Accede al estilo personalizado del componente List
-  listItemStyle, // Accede al estilo personalizado del componente ListItem
-  listItemTextStyle, // Accede al estilo personalizado del componente ListItemText
+  sidebarStyle,
+  listStyle,
+  listItemStyle,
+  listItemTextStyle,
+  userRoles, // Pasa los roles del usuario como una prop
 }) => {
   const Theme = useTheme();
   const customStyles = getCustomStyles(Theme);
 
   const [openItems, setOpenItems] = useState({});
+
+  // const shouldShowItem = (item) => {
+  //   const roles = localStorage.getItem("roles");
+  //   const userRoles = roles ? JSON.parse(roles) : [];
+
+  //   if (!item.roles || item.roles.some((role) => userRoles.includes(role))) {
+  //     return true;
+  //   }
+
+  //   return false;
+  // };
+  const shouldShowItem = (item) => {
+    const roles = localStorage.getItem('roles');
+    const userRoles = roles ? JSON.parse(roles) : [];
+
+    if (!item.roles) {
+      // Si el elemento no tiene roles definidos, mostrarlo
+      return true;
+    }
+
+    // Verificar si al menos uno de los roles del usuario coincide con los roles del elemento
+    return item.roles.some((role) => userRoles.includes(role));
+  };
 
   const handleItemClick = (itemName, route, hasCollapse) => {
     if (hasCollapse) {
@@ -34,69 +58,68 @@ const SidebarItems = ({
         [itemName]: !prevOpenItems[itemName],
       }));
     } else {
-      setOpenItems({}); // Cerrar todos los colapsos si no hay colapsos en el elemento clickeado
-      // Redirigir a la ruta correspondiente si se proporciona
+      setOpenItems({});
+
       if (route) {
-        history.push(route); // Usamos history.push para redirigir sin recargar la página
+        history.push(route);
       }
     }
   };
 
   const isItemOpen = (itemName) => {
-    return openItems[itemName] || false; // Aseguramos que esté definido como false si no existe
+    return openItems[itemName] || false;
   };
 
   return (
     <List style={{ ...customStyles.sidebar, ...sidebarStyle }}>
-      {items.map((item) => (
-        <React.Fragment key={item.name}>
-          <ListItem
-            style={{ ...customStyles.listItem, ...listItemStyle }}
-            onClick={() =>
-              handleItemClick(item.name, item.route, item.collapse)
-            }
-            component={item.route ? Link : 'button'}
-            to={item.route}
-          >
-            {/* <ListItemIcon>{item.icon}</ListItemIcon>*/}
-            <ListItemText
-              primary={item.name}
-              style={{ ...customStyles.ListItemText, ...listItemTextStyle }}
-            />
-            {item.collapse && isItemOpen(item.name) ? (
-              <MoreHorizIcon />
-            ) : (
-              <MoreVertIcon />
-            )}
-          </ListItem>
-          {item.collapse && (
-            <Collapse
-              in={isItemOpen(item.name)}
-              timeout='auto'
-              unmountOnExit
-
-              // style={{ ...customStyles.list, ...listStyle }}
+      {items
+        .filter(shouldShowItem) // Filtra las rutas que deben mostrarse
+        .map((item) => (
+          <React.Fragment key={item.name}>
+            <ListItem
+              style={{ ...customStyles.listItem, ...listItemStyle }}
+              onClick={() =>
+                handleItemClick(item.name, item.route, item.collapse)
+              }
+              component={item.route ? Link : 'button'}
+              to={item.route}
             >
-              <List
-                // style={{ ...customStyles.list, ...listStyle }}
-                disablePadding
+              <ListItemText
+                primary={item.name}
+                style={{ ...customStyles.ListItemText, ...listItemTextStyle }}
+              />
+              {item.collapse && isItemOpen(item.name) ? (
+                <MoreHorizIcon />
+              ) : (
+                <MoreVertIcon />
+              )}
+            </ListItem>
+            {item.collapse && (
+              <Collapse
+                in={isItemOpen(item.name)}
+                timeout='auto'
+                unmountOnExit
               >
-                {/* Pasamos las rutas dentro de los colapsos a SidebarItems */}
-                <SidebarItems
-                  items={item.collapse}
-                  history={history}
-                  sidebarStyle={{ ...customStyles.sidebar, ...sidebarStyle }}
-                  listItemStyle={{ ...customStyles.listItem, ...listItemStyle }}
-                  listItemTextStyle={{
-                    ...customStyles.ListItemText,
-                    ...listItemTextStyle,
-                  }}
-                />
-              </List>
-            </Collapse>
-          )}
-        </React.Fragment>
-      ))}
+                <List disablePadding>
+                  <SidebarItems
+                    items={item.collapse}
+                    history={history}
+                    sidebarStyle={{ ...customStyles.sidebar, ...sidebarStyle }}
+                    listItemStyle={{
+                      ...customStyles.listItem,
+                      ...listItemStyle,
+                    }}
+                    listItemTextStyle={{
+                      ...customStyles.ListItemText,
+                      ...listItemTextStyle,
+                    }}
+                    userRoles={userRoles} // Pasa los roles del usuario recursivamente
+                  />
+                </List>
+              </Collapse>
+            )}
+          </React.Fragment>
+        ))}
     </List>
   );
 };
