@@ -13,49 +13,55 @@ export const loginSuccess = (userData) => {
   };
 };
 
-export const loginFailure = () => ({
+export const loginFailure = (errorMessage) => ({
   type: authTypes.LoginFailure,
+  payload: errorMessage,
 });
 
-export const loginUser = (credentials) => async (dispatch) => {
-  dispatch(loginRequest());
+export const loginUser =
+  ({ dni, password }) =>
+  async (dispatch) => {
+    dispatch(loginRequest());
 
-  try {
-    const response = await fetch(authEndpoints.login.url, {
-      method: authEndpoints.login.method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    });
+    try {
+      const response = await fetch(authEndpoints.login.url, {
+        method: authEndpoints.login.method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ dni, password }),
+      });
 
-    if (response.ok) {
-      const userData = await response.json();
-      console.log('User', userData);
-      const accessToken = userData.accessToken; // Obtén el token de acceso
+      if (response.ok) {
+        const userData = await response.json();
+        const accessToken = userData.accessToken;
 
-      // Almacena el token de acceso en el localStorage
-      localStorage.setItem('token', accessToken);
+        localStorage.setItem('token', accessToken);
 
-      const roles = userData.user.roles; // Obtén los roles
-      localStorage.setItem('roles', JSON.stringify(roles)); // Almacena los roles en el localStorage
-      dispatch(loginSuccess(roles));
-      console.log('roles', roles);
-      dispatch(loginSuccess(userData)); // Llama a loginSuccess con userData
-    } else {
-      dispatch(loginFailure());
+        const roles = userData.user.roles;
+        localStorage.setItem('roles', JSON.stringify(roles));
+
+        dispatch(loginSuccess(userData));
+      } else {
+        const error = await response.json();
+        dispatch(loginFailure(error.message));
+      }
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        const errorMessage = error.errors[0];
+        dispatch(loginFailure(errorMessage));
+      } else {
+        console.error(error);
+        dispatch(loginFailure('Error al iniciar sesión'));
+      }
     }
-  } catch (error) {
-    dispatch(loginFailure());
-  }
-};
+  };
 
 export const logout = () => {
-  // Elimina los datos de usuario del localStorage
   localStorage.removeItem('token');
   localStorage.removeItem('roles');
 
   return {
-    type: authTypes.Logout, // Define un nuevo tipo de acción para el logout
+    type: authTypes.Logout,
   };
 };

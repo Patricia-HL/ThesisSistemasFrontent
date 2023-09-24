@@ -11,28 +11,31 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../redux/authActions/loginActions';
 import useForm from '../../../hooks/useForm';
 import { containerStyle } from './signin.styles';
+import ReusableSnackbar from '../../../components/common/ReusableSnackbar';
+
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const validationRules = {
-    dniOrCellNumber: (value) =>
-      value.trim() === '' ? 'Este campo es obligatorio' : null,
+    dni: (value) => (value.trim() === '' ? 'Este campo es obligatorio' : null),
     password: (value) =>
       value.trim() === '' ? 'Este campo es obligatorio' : null,
   };
 
   const { values, errors, handleChange } = useForm(
-    { dniOrCellNumber: '', password: '' },
+    { dni: '', password: '' },
     validationRules
   );
 
   const [showPassword, setShowPassword] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const credentials = {
-      dni: values.dniOrCellNumber,
+      dni: values.dni,
       password: values.password,
     };
 
@@ -41,6 +44,18 @@ const SignIn = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Error durante la autenticación:', error);
+      setSnackbarOpen(true);
+
+      if (error.message === 'Credenciales incorrectas') {
+        console.log(error.message);
+        setSnackbarMessage(
+          'Las credenciales proporcionadas son incorrectas. Por favor, inténtelo de nuevo.'
+        );
+      } else {
+        setSnackbarMessage(
+          'Error durante la autenticación. Por favor, inténtelo de nuevo.'
+        );
+      }
     }
   };
 
@@ -70,11 +85,11 @@ const SignIn = () => {
                     style={containerStyle.inputStyle}
                     label='Documento de Identidad o Celular'
                     type='text'
-                    name='dniOrCellNumber'
-                    value={values.dniOrCellNumber}
+                    name='dni'
+                    value={values.dni}
                     onChange={handleChange}
-                    helperText={errors.dniOrCellNumber}
-                    error={Boolean(errors.dniOrCellNumber)}
+                    helperText={errors.dni}
+                    error={Boolean(errors.dni)}
                     required={true}
                     hideAsterisk
                   />
@@ -116,6 +131,12 @@ const SignIn = () => {
             </Grid>
           </Grid>{' '}
         </ReusablePaper>
+        <ReusableSnackbar
+          open={snackbarOpen}
+          handleClose={() => setSnackbarOpen(false)}
+          message={snackbarMessage}
+          type='error'
+        />
       </Box>
     </PageBody>
   );
