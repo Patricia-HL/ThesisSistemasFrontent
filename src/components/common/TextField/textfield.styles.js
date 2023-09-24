@@ -1,6 +1,6 @@
 export const textFieldStyle = (props) => ({
-  background: props.style?.background || 'transparent',
-  border: props.style?.border || '1px solid #ccc',
+  background: props.style?.background || '',
+  border: props.style?.border || '',
   borderRadius: props.style?.borderRadius || '8px',
   boxShadow: props.style?.boxShadow || 'none',
   color: props.style?.color || '',

@@ -10,7 +10,7 @@ export const containerStyle = {
   },
   paperStyle: {
     // Define aquí los estilos personalizados para el papel
-    backgroundColor: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    backgroundColor: 'linear-gradient(45deg, #FE6B8B 10%, #FF8E53 50%)',
     borderRadius: '10px',
   },
 

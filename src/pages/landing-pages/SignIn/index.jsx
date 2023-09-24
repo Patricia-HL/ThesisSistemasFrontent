@@ -1,12 +1,16 @@
-import React from 'react';
-import { Box, Avatar, Grid, Paper, TextField, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Avatar, Grid, Paper, Button, IconButton } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import PageBody from '../../../components/common/PageBody';
+import ReusableTextField from '../../../components/common/TextField';
+import ReusablePaper from '../../../components/common/ReusablePaper';
 import useNavigate from '../../../hooks/useNavigate';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../redux/authActions/loginActions';
 import useForm from '../../../hooks/useForm';
-
+import { containerStyle } from './signin.styles';
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,6 +26,8 @@ const SignIn = () => {
     { dniOrCellNumber: '', password: '' },
     validationRules
   );
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,47 +46,74 @@ const SignIn = () => {
 
   return (
     <PageBody>
-      <Box component={Paper}>
-        <Grid container>
-          <Grid item>
-            <Avatar>
-              <LockOutlinedIcon />
-            </Avatar>
-          </Grid>
-          <Grid item>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                label='Documento de Identidad o Celular'
-                variant='outlined'
-                name='dniOrCellNumber'
-                value={values.dniOrCellNumber}
-                onChange={handleChange}
-                helperText={errors.dniOrCellNumber}
-                error={Boolean(errors.dniOrCellNumber)}
-                required
-              />
+      {' '}
+      <Box style={containerStyle.root}>
+        {' '}
+        <ReusablePaper style={containerStyle.paperStyle}>
+          <Grid
+            container
+            style={containerStyle.paper_content}
+          >
+            <Grid item>
+              <Avatar style={containerStyle.avatarStyle}>
+                <LockOutlinedIcon />
+              </Avatar>
+            </Grid>
+            <Grid item>
+              {' '}
+              <form onSubmit={handleSubmit}>
+                <Grid
+                  container
+                  style={containerStyle.formStyle}
+                >
+                  <ReusableTextField
+                    style={containerStyle.inputStyle}
+                    label='Documento de Identidad o Celular'
+                    type='text'
+                    name='dniOrCellNumber'
+                    value={values.dniOrCellNumber}
+                    onChange={handleChange}
+                    helperText={errors.dniOrCellNumber}
+                    error={Boolean(errors.dniOrCellNumber)}
+                    required={true}
+                  />
 
-              <TextField
-                label='Contraseña'
-                variant='outlined'
-                type='password'
-                name='password'
-                value={values.password}
-                onChange={handleChange}
-                helperText={errors.password}
-                error={Boolean(errors.password)}
-                required
-              />
-
-              <Button
-                variant='contained'
-                type='submit'
-              >
-                Iniciar sesión
-              </Button>
-            </form>
-          </Grid>
-        </Grid>
+                  <ReusableTextField
+                    style={containerStyle.inputStyle}
+                    label='Contraseña'
+                    type={showPassword ? 'text' : 'password'}
+                    name='password'
+                    value={values.password}
+                    onChange={handleChange}
+                    helperText={errors.password}
+                    error={Boolean(errors.password)}
+                    required={true}
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge='end'
+                        >
+                          {showPassword ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      ),
+                    }}
+                  />
+                  <Button
+                    variant='contained'
+                    type='submit'
+                  >
+                    Iniciar sesión
+                  </Button>
+                </Grid>
+              </form>
+            </Grid>
+          </Grid>{' '}
+        </ReusablePaper>
       </Box>
     </PageBody>
   );
