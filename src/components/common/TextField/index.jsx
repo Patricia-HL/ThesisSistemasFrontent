@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
-import { textFieldStyle } from './textfield.styles'; // Asegúrate de importar los estilos correctos
+import { textFieldStyle } from './textfield.styles';
 
 const ReusableTextField = ({
   label,
@@ -21,7 +21,7 @@ const ReusableTextField = ({
     <TextField
       style={mergedStyle}
       label={label}
-      variant='outlined'
+      variant={variant}
       type={type}
       name={name}
       value={value}
@@ -29,7 +29,15 @@ const ReusableTextField = ({
       helperText={helperText}
       error={error}
       required={required}
-      InputProps={InputProps} // Pasa InputProps a TextField
+      InputProps={InputProps}
+      InputLabelProps={{
+        required: false,
+        style: {
+          '&::after': {
+            content: 'none',
+          },
+        },
+      }}
     />
   );
 };

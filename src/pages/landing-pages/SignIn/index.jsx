@@ -76,6 +76,7 @@ const SignIn = () => {
                     helperText={errors.dniOrCellNumber}
                     error={Boolean(errors.dniOrCellNumber)}
                     required={true}
+                    hideAsterisk
                   />
 
                   <ReusableTextField
@@ -88,6 +89,7 @@ const SignIn = () => {
                     helperText={errors.password}
                     error={Boolean(errors.password)}
                     required={true}
+                    hideAsterisk
                     InputProps={{
                       endAdornment: (
                         <IconButton
