@@ -39,7 +39,7 @@ const authReducer = (state = initialState, action) => {
         token: null,
         user: null,
         isAuthenticated: false,
-        // isTemporaryPassword: true, // Reseteamos a true al hacer logout
+        isTemporaryPassword: true, // Reseteamos a true al hacer logout
       };
     case authTypes.SetTemporaryPassword: // Nuevo caso para actualizar isTemporaryPassword
       return {

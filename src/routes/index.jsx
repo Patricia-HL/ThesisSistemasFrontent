@@ -102,11 +102,11 @@ const publicRoutes = [
 ];
 
 const privateRoutes = [
-  {
-    name: 'Cmbiar Contraseña',
-    route: '/change-password',
-    component: ChangePasswordInitial,
-  },
+  // {
+  //   name: 'Cmbiar Contraseña',
+  //   route: '/change-password',
+  //   component: ChangePasswordInitial,
+  // },
   {
     name: 'Inicio',
     route: '/dashboard',

@@ -45,6 +45,10 @@ export const loginUser =
         const roles = userData.user.roles;
         localStorage.setItem('roles', JSON.stringify(roles));
         dispatch(setTemporaryPassword(userData.user.isTemporaryPassword));
+        localStorage.setItem(
+          'isTemporaryPassword',
+          JSON.stringify(userData.user.isTemporaryPassword)
+        );
         console.log('setTemporaryPassword', userData.user.isTemporaryPassword);
 
         dispatch(loginSuccess(userData));

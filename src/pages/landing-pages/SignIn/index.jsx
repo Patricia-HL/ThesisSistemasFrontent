@@ -9,12 +9,12 @@ import ReusablePaper from '../../../components/common/ReusablePaper';
 import useNavigate from '../../../hooks/useNavigate';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-
 import { loginUser } from '../../../redux/authActions/loginActions';
 import useForm from '../../../hooks/useForm';
 import { containerStyle } from './signin.styles';
 import ReusableSnackbar from '../../../components/common/ReusableSnackbar';
-import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom'; // Asegúrate de importar useHistory
+
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,12 +48,12 @@ const SignIn = () => {
     try {
       await dispatch(loginUser(credentials));
 
-      if (isTemporaryPassword) {
-        // Redirige al usuario a ChangePasswordInitial si es contraseña temporal
-        history.push('/change-password-initial');
-      } else {
-        // Redirige al usuario a la página de dashboard u otra página
+      if (isTemporaryPassword) {       // Redirige al usuario a la página de dashboard u otra página
         history.push('/dashboard');
+        // Redirige al usuario a ChangePasswordInitial si es contraseña temporal
+        history.push('/change-password-initial'); // Cambia esto a la ruta de tu componente ChangePasswordInitial
+      } else {
+ 
       }
     } catch (error) {
       console.error('Error durante la autenticación:', error);

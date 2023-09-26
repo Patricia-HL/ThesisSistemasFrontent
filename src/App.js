@@ -8,6 +8,7 @@ import {
 import { useSelector } from 'react-redux'; // Importa useSelector de react-redux
 import LayoutPage from './Layouts/LayoutPage';
 import LayoutDashboard from './Layouts/LayoutDashboard';
+import ChangePasswordInitial from './pages/dashboard-pages/auth/ChangePasswordInitial';
 import { publicRoutes, privateRoutes } from './routes';
 
 const renderRoutes = (routes) => {
@@ -29,11 +30,10 @@ const renderRoutes = (routes) => {
 
 const App = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  console.log('esta autenticado?:', isAuthenticated);
   const isTemporaryPassword = useSelector(
     (state) => state.auth.isTemporaryPassword
-  ); // Obtiene el estado de isTemporaryPassword desde Redux
-  console.log('Es contraseña temporal?:', isTemporaryPassword);
+  );
+
   return (
     <Router>
       {isAuthenticated ? (
@@ -43,10 +43,20 @@ const App = () => {
         >
           <Switch>
             {renderRoutes(privateRoutes)}
-            {isTemporaryPassword ? (
-              <Redirect to='/change-password' />
-            ) : (
-              <Redirect to='/dashboard' />
+            {isTemporaryPassword && (
+              <Route
+                path='/change-password-initial'
+                component={ChangePasswordInitial}
+              />
+            )}
+            {isTemporaryPassword || (
+              <Redirect
+                to={
+                  isTemporaryPassword
+                    ? '/change-password-initial'
+                    : '/dashboard'
+                }
+              />
             )}
           </Switch>
         </LayoutDashboard>
