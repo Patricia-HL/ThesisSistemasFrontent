@@ -5,6 +5,7 @@ const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: localStorage.getItem('token') ? true : false,
   user: null,
+  error: null,
   isTemporaryPassword: true, // Inicializamos con true
   loading: false,
 };
@@ -24,6 +25,7 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: true,
         isTemporaryPassword: action.payload.user.isTemporaryPassword,
         loading: false,
+        error: null,
       };
     case authTypes.LoginFailure:
       return {
@@ -32,6 +34,7 @@ const authReducer = (state = initialState, action) => {
         user: null,
         isAuthenticated: false,
         loading: false,
+        error: action.payload,
       };
     case authTypes.Logout:
       return {

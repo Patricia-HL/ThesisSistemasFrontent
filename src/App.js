@@ -4,8 +4,9 @@ import {
   Route,
   Switch,
   Redirect,
+  useHistory,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // Importa useSelector de react-redux
+import { useSelector } from 'react-redux';
 import LayoutPage from './Layouts/LayoutPage';
 import LayoutDashboard from './Layouts/LayoutDashboard';
 import ChangePasswordInitial from './pages/dashboard-pages/auth/ChangePasswordInitial';
@@ -34,6 +35,8 @@ const App = () => {
     (state) => state.auth.isTemporaryPassword
   );
 
+  const history = useHistory();
+
   return (
     <Router>
       {isAuthenticated ? (
@@ -45,17 +48,8 @@ const App = () => {
             {renderRoutes(privateRoutes)}
             {isTemporaryPassword && (
               <Route
-                path='/change-password-initial'
+                to='/change-password-initial'
                 component={ChangePasswordInitial}
-              />
-            )}
-            {isTemporaryPassword || (
-              <Redirect
-                to={
-                  isTemporaryPassword
-                    ? '/change-password-initial'
-                    : '/dashboard'
-                }
               />
             )}
           </Switch>
@@ -67,7 +61,7 @@ const App = () => {
         >
           <Switch>
             {renderRoutes(publicRoutes)}
-            <Redirect to='/about-us' />
+            <Redirect to={history.location.pathname} />
           </Switch>
         </LayoutPage>
       )}

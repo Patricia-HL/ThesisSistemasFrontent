@@ -1,4 +1,3 @@
-// actions/authActions.js
 import { authTypes } from '../../types/authTypes';
 import { authEndpoints } from '../../types/endPoints.jsx';
 
@@ -17,6 +16,7 @@ export const loginFailure = (errorMessage) => ({
   type: authTypes.LoginFailure,
   payload: errorMessage,
 });
+
 export const setTemporaryPassword = (value) => ({
   type: authTypes.SetTemporaryPassword,
   payload: value,
@@ -45,17 +45,12 @@ export const loginUser =
         const roles = userData.user.roles;
         localStorage.setItem('roles', JSON.stringify(roles));
         dispatch(setTemporaryPassword(userData.user.isTemporaryPassword));
-        localStorage.setItem(
-          'isTemporaryPassword',
-          JSON.stringify(userData.user.isTemporaryPassword)
-        );
-        console.log('setTemporaryPassword', userData.user.isTemporaryPassword);
 
         dispatch(loginSuccess(userData));
       } else {
-        const error = await response.json();
-        dispatch(loginFailure(error.message));
-        console.log(error);
+        const errorData = await response.json();
+        dispatch(loginFailure(errorData.message));
+        console.log(errorData.message); //credenciales incorrectas manda mensaje desde el servidor
       }
     } catch (error) {
       if (error.name === 'ValidationError') {

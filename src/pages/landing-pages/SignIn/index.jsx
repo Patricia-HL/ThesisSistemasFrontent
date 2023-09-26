@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Avatar, Grid, Paper, Button, IconButton } from '@mui/material';
+import { Box, Avatar, Grid, Button, IconButton } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -7,20 +7,21 @@ import PageBody from '../../../components/common/PageBody';
 import ReusableTextField from '../../../components/common/TextField';
 import ReusablePaper from '../../../components/common/ReusablePaper';
 import useNavigate from '../../../hooks/useNavigate';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; // Importa useSelector
 import { loginUser } from '../../../redux/authActions/loginActions';
 import useForm from '../../../hooks/useForm';
 import { containerStyle } from './signin.styles';
-import ReusableSnackbar from '../../../components/common/ReusableSnackbar';
-import { useHistory } from 'react-router-dom'; // Asegúrate de importar useHistory
+import { useHistory } from 'react-router-dom';
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isTemporaryPassword = useSelector(
     (state) => state.auth.isTemporaryPassword
-  ); // Obtener el valor de isTemporaryPassword
+  );
+
+  const { auth } = useSelector((state) => state);
+  const { error } = auth;
 
   const validationRules = {
     dni: (value) => (value.trim() === '' ? 'Este campo es obligatorio' : null),
@@ -34,9 +35,7 @@ const SignIn = () => {
   );
 
   const [showPassword, setShowPassword] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const history = useHistory(); // Obtener el objeto history para redireccionar
+  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,35 +47,20 @@ const SignIn = () => {
     try {
       await dispatch(loginUser(credentials));
 
-      if (isTemporaryPassword) {       // Redirige al usuario a la página de dashboard u otra página
-        history.push('/dashboard');
-        // Redirige al usuario a ChangePasswordInitial si es contraseña temporal
-        history.push('/change-password-initial'); // Cambia esto a la ruta de tu componente ChangePasswordInitial
+      if (isTemporaryPassword) {
+        navigate('/change-password-initial');
       } else {
- 
+        // Redirecciona a la página que desees en caso de autenticación exitosa
       }
     } catch (error) {
       console.error('Error durante la autenticación:', error);
-      setSnackbarOpen(true);
-
-      if (error.message === 'Credenciales incorrectas') {
-        console.log(error.message);
-        setSnackbarMessage(
-          'Las credenciales proporcionadas son incorrectas. Por favor, inténtelo de nuevo.'
-        );
-      } else {
-        setSnackbarMessage(
-          'Error durante la autenticación. Por favor, inténtelo de nuevo.'
-        );
-      }
+      // No necesitas manejar el error.message aquí, ya que se gestiona en el estado de Redux
     }
   };
 
   return (
     <PageBody>
-      {' '}
       <Box style={containerStyle.root}>
-        {' '}
         <ReusablePaper style={containerStyle.paperStyle}>
           <Grid
             container
@@ -88,8 +72,8 @@ const SignIn = () => {
               </Avatar>
             </Grid>
             <Grid item>
-              {' '}
               <form onSubmit={handleSubmit}>
+                {error && <span>{error}</span>}
                 <Grid
                   container
                   style={containerStyle.formStyle}
@@ -104,7 +88,6 @@ const SignIn = () => {
                     helperText={errors.dni}
                     error={Boolean(errors.dni)}
                     required={true}
-                    hideAsterisk
                   />
 
                   <ReusableTextField
@@ -117,7 +100,6 @@ const SignIn = () => {
                     helperText={errors.password}
                     error={Boolean(errors.password)}
                     required={true}
-                    hideAsterisk
                     InputProps={{
                       endAdornment: (
                         <IconButton
@@ -133,6 +115,7 @@ const SignIn = () => {
                       ),
                     }}
                   />
+
                   <Button
                     variant='contained'
                     type='submit'
@@ -142,14 +125,8 @@ const SignIn = () => {
                 </Grid>
               </form>
             </Grid>
-          </Grid>{' '}
+          </Grid>
         </ReusablePaper>
-        <ReusableSnackbar
-          open={snackbarOpen}
-          handleClose={() => setSnackbarOpen(false)}
-          message={snackbarMessage}
-          type='error'
-        />
       </Box>
     </PageBody>
   );
