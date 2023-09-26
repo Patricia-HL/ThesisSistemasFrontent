@@ -17,6 +17,10 @@ export const loginFailure = (errorMessage) => ({
   type: authTypes.LoginFailure,
   payload: errorMessage,
 });
+export const setTemporaryPassword = (value) => ({
+  type: authTypes.SetTemporaryPassword,
+  payload: value,
+});
 
 export const loginUser =
   ({ dni, password }) =>
@@ -40,11 +44,14 @@ export const loginUser =
 
         const roles = userData.user.roles;
         localStorage.setItem('roles', JSON.stringify(roles));
+        dispatch(setTemporaryPassword(userData.user.isTemporaryPassword));
+        console.log('setTemporaryPassword', userData.user.isTemporaryPassword);
 
         dispatch(loginSuccess(userData));
       } else {
         const error = await response.json();
         dispatch(loginFailure(error.message));
+        console.log(error);
       }
     } catch (error) {
       if (error.name === 'ValidationError') {

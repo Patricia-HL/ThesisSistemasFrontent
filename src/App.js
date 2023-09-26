@@ -28,8 +28,12 @@ const renderRoutes = (routes) => {
 };
 
 const App = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); // Obtiene el estado de autenticación desde Redux
-
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  console.log('esta autenticado?:', isAuthenticated);
+  const isTemporaryPassword = useSelector(
+    (state) => state.auth.isTemporaryPassword
+  ); // Obtiene el estado de isTemporaryPassword desde Redux
+  console.log('Es contraseña temporal?:', isTemporaryPassword);
   return (
     <Router>
       {isAuthenticated ? (
@@ -39,7 +43,11 @@ const App = () => {
         >
           <Switch>
             {renderRoutes(privateRoutes)}
-            <Redirect to='/dashboard' />
+            {isTemporaryPassword ? (
+              <Redirect to='/change-password' />
+            ) : (
+              <Redirect to='/dashboard' />
+            )}
           </Switch>
         </LayoutDashboard>
       ) : (

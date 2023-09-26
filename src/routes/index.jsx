@@ -9,6 +9,7 @@ import ContactUs from '../pages/landing-pages/ContactUs';
 import SignIn from '../pages/landing-pages/SignIn';
 
 // Pages Privates
+import ChangePasswordInitial from '../pages/dashboard-pages/auth/ChangePasswordInitial';
 import Main from '../pages/dashboard-pages/Main';
 import AdminRegister from '../pages/dashboard-pages/users/Admin/AdminRegister';
 import AdminList from '../pages/dashboard-pages/users/Admin/AdminList';
@@ -101,6 +102,11 @@ const publicRoutes = [
 ];
 
 const privateRoutes = [
+  {
+    name: 'Cmbiar Contraseña',
+    route: '/change-password',
+    component: ChangePasswordInitial,
+  },
   {
     name: 'Inicio',
     route: '/dashboard',

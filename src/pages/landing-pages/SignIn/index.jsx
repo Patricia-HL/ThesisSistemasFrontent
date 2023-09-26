@@ -8,14 +8,19 @@ import ReusableTextField from '../../../components/common/TextField';
 import ReusablePaper from '../../../components/common/ReusablePaper';
 import useNavigate from '../../../hooks/useNavigate';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
 import { loginUser } from '../../../redux/authActions/loginActions';
 import useForm from '../../../hooks/useForm';
 import { containerStyle } from './signin.styles';
 import ReusableSnackbar from '../../../components/common/ReusableSnackbar';
-
+import { useHistory } from 'react-router-dom';
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isTemporaryPassword = useSelector(
+    (state) => state.auth.isTemporaryPassword
+  ); // Obtener el valor de isTemporaryPassword
 
   const validationRules = {
     dni: (value) => (value.trim() === '' ? 'Este campo es obligatorio' : null),
@@ -31,6 +36,7 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const history = useHistory(); // Obtener el objeto history para redireccionar
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +47,14 @@ const SignIn = () => {
 
     try {
       await dispatch(loginUser(credentials));
-      navigate('/dashboard');
+
+      if (isTemporaryPassword) {
+        // Redirige al usuario a ChangePasswordInitial si es contraseña temporal
+        history.push('/change-password-initial');
+      } else {
+        // Redirige al usuario a la página de dashboard u otra página
+        history.push('/dashboard');
+      }
     } catch (error) {
       console.error('Error durante la autenticación:', error);
       setSnackbarOpen(true);
