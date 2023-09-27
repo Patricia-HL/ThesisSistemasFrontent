@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -6,11 +6,12 @@ import {
   Redirect,
   useHistory,
 } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import LayoutPage from './Layouts/LayoutPage';
 import LayoutDashboard from './Layouts/LayoutDashboard';
 import ChangePasswordInitial from './pages/dashboard-pages/auth/ChangePasswordInitial';
 import { publicRoutes, privateRoutes } from './routes';
+import { setTemporaryPassword } from './redux/authActions/loginActions'; // Importa la acción para establecer isTemporaryPassword
 
 const renderRoutes = (routes) => {
   return routes.map((route) => {
@@ -34,37 +35,66 @@ const App = () => {
   const isTemporaryPassword = useSelector(
     (state) => state.auth.isTemporaryPassword
   );
-
+  const dispatch = useDispatch(); // Obtiene la función dispatch de Redux
   const history = useHistory();
+
+  useEffect(() => {
+    const currentPath = history.location.pathname;
+
+    if (isAuthenticated) {
+      if (currentPath === '/login') {
+        if (isTemporaryPassword) {
+          history.replace('/change-password');
+        } else {
+          history.replace('/dashboard');
+        }
+      }
+    }
+  }, [isAuthenticated, isTemporaryPassword, history]);
+
+  // Verifica el valor de isTemporaryPassword en localStorage al cargar la aplicación
+  useEffect(() => {
+    const storedIsTemporaryPassword = localStorage.getItem(
+      'isTemporaryPassword'
+    );
+    if (storedIsTemporaryPassword) {
+      dispatch(setTemporaryPassword(storedIsTemporaryPassword === 'true'));
+    }
+  }, [dispatch]);
 
   return (
     <Router>
-      {isAuthenticated ? (
-        <LayoutDashboard
-          isAuthenticated={isAuthenticated}
-          privateRoutes={privateRoutes}
-        >
-          <Switch>
-            {renderRoutes(privateRoutes)}
-            {isTemporaryPassword && (
-              <Route
-                to='/change-password-initial'
-                component={ChangePasswordInitial}
+      <Switch>
+        {isAuthenticated ? (
+          <>
+            <LayoutDashboard
+              isAuthenticated={isAuthenticated}
+              privateRoutes={privateRoutes}
+            >
+              {renderRoutes(privateRoutes)}
+              <Redirect
+                to={!isTemporaryPassword ? '/dashboard' : '/change-password'}
               />
-            )}
-          </Switch>
-        </LayoutDashboard>
-      ) : (
-        <LayoutPage
-          isAuthenticated={isAuthenticated}
-          publicRoutes={publicRoutes}
-        >
-          <Switch>
-            {renderRoutes(publicRoutes)}
-            <Redirect to={history.location.pathname} />
-          </Switch>
-        </LayoutPage>
-      )}
+              {isTemporaryPassword && (
+                <Route
+                  path='/change-password'
+                  component={ChangePasswordInitial}
+                />
+              )}
+            </LayoutDashboard>
+          </>
+        ) : (
+          <>
+            <LayoutPage
+              isAuthenticated={isAuthenticated}
+              publicRoutes={publicRoutes}
+            >
+              {renderRoutes(publicRoutes)}
+            </LayoutPage>
+            <Redirect to='/about-us' />
+          </>
+        )}
+      </Switch>
     </Router>
   );
 };

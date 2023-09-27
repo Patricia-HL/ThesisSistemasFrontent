@@ -96,7 +96,7 @@ const publicRoutes = [
 
   {
     name: 'Iniciar Sesión',
-    route: '/sign-in',
+    route: '/login',
     component: SignIn,
   },
 ];

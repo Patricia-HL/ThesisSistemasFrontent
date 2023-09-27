@@ -1,3 +1,4 @@
+// redux/authActions/loginActions.js
 import { authTypes } from '../../types/authTypes';
 import { authEndpoints } from '../../types/endPoints.jsx';
 
@@ -41,6 +42,10 @@ export const loginUser =
         const accessToken = userData.accessToken;
 
         localStorage.setItem('token', accessToken);
+        localStorage.setItem(
+          'isTemporaryPassword',
+          userData.user.isTemporaryPassword
+        ); // Guardar isTemporaryPassword en localStorage
 
         const roles = userData.user.roles;
         localStorage.setItem('roles', JSON.stringify(roles));
@@ -50,7 +55,7 @@ export const loginUser =
       } else {
         const errorData = await response.json();
         dispatch(loginFailure(errorData.message));
-        console.log(errorData.message); //credenciales incorrectas manda mensaje desde el servidor
+        console.log(errorData.message); // Credenciales incorrectas, mensaje desde el servidor
       }
     } catch (error) {
       if (error.name === 'ValidationError') {
@@ -66,6 +71,7 @@ export const loginUser =
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('roles');
+  localStorage.removeItem('isTemporaryPassword'); // Remover isTemporaryPassword al hacer logout
 
   return {
     type: authTypes.Logout,

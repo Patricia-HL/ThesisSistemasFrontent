@@ -6,7 +6,7 @@ const initialState = {
   isAuthenticated: localStorage.getItem('token') ? true : false,
   user: null,
   error: null,
-  isTemporaryPassword: true, // Inicializamos con true
+  isTemporaryPassword: localStorage.getItem('isTemporaryPassword') === 'true',
   loading: false,
 };
 
@@ -31,20 +31,21 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         token: null,
-        user: null,
-        isAuthenticated: false,
         loading: false,
         error: action.payload,
       };
     case authTypes.Logout:
+      localStorage.removeItem('token');
+      localStorage.removeItem('isTemporaryPassword'); // Remover isTemporaryPassword al hacer logout
       return {
         ...state,
         token: null,
         user: null,
         isAuthenticated: false,
-        isTemporaryPassword: true, // Reseteamos a true al hacer logout
+        isTemporaryPassword: false, // Reiniciar a false al hacer logout
       };
-    case authTypes.SetTemporaryPassword: // Nuevo caso para actualizar isTemporaryPassword
+    case authTypes.SetTemporaryPassword:
+      localStorage.setItem('isTemporaryPassword', action.payload); // Actualizar isTemporaryPassword en localStorage
       return {
         ...state,
         isTemporaryPassword: action.payload,

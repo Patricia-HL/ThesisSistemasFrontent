@@ -44,18 +44,7 @@ const SignIn = () => {
       password: values.password,
     };
 
-    try {
-      await dispatch(loginUser(credentials));
-
-      if (isTemporaryPassword) {
-        navigate('/change-password-initial');
-      } else {
-        // Redirecciona a la página que desees en caso de autenticación exitosa
-      }
-    } catch (error) {
-      console.error('Error durante la autenticación:', error);
-      // No necesitas manejar el error.message aquí, ya que se gestiona en el estado de Redux
-    }
+    await dispatch(loginUser(credentials));
   };
 
   return (
