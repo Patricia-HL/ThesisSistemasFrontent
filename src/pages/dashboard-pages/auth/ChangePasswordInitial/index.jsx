@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import ReusablePaper from '../../../../components/common/ReusablePaper';
 import { useDispatch } from 'react-redux';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useHistory } from 'react-router-dom';
 import ReusableDialog from '../../../../components/common/ReusableDialog';
 import { logout } from '../../../../redux/authActions/loginActions';
@@ -24,6 +27,7 @@ const ChangePasswordInitial = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarType, setSnackbarType] = useState('error');
+  const [showPassword, setShowPassword] = useState(false);
 
   const { values, errors, handleChange, reset } = useForm(
     {
@@ -115,12 +119,22 @@ const ChangePasswordInitial = () => {
             <ReusableTextField
               style={containerStyle.inputStyle}
               label='Contraseña Actual'
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               name='password'
               value={values.password}
               onChange={handleChange}
               error={Boolean(errors.password)}
               helperText={errors.password}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge='end'
+                  >
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                ),
+              }}
             />
             <ReusableTextField
               style={containerStyle.inputStyle}
