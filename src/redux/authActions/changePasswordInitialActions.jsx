@@ -39,10 +39,17 @@ export const changeInitialPassword =
         const errorData = await response.json();
         // Si hay un error en el cambio de contraseña, dispara la acción de fallo
         dispatch(changeInitialPasswordFailure(errorData.message));
+        console.log(errorData.message); // Credenciales incorrectas, mensaje desde el servidor
       }
     } catch (error) {
-      console.error('Error al cambiar la contraseña:', error);
-      // Si hay un error en la solicitud, dispara la acción de fallo con el mensaje de error
-      dispatch(changeInitialPasswordFailure('Error al cambiar la contraseña'));
+      if (error.name === 'ValidationError') {
+        const errorMessage = error.errors[0];
+        dispatch(changeInitialPasswordFailure(errorMessage));
+      } else {
+        console.error(error);
+        dispatch(
+          changeInitialPasswordFailure('Error al iniciar cambio de Contraseña')
+        );
+      }
     }
   };

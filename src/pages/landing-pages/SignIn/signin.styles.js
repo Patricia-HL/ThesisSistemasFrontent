@@ -20,7 +20,7 @@ export const containerStyle = {
     alignItems: 'center',
     background: 'linear-gradient(45deg, #FE6B8B, #FF8E  90%)',
     justifyContent: 'space-between',
-    padding: '50px 4px 20px 4px',
+    padding: '50px 10px 20px 10px',
     borderRadius: '10px',
   },
   formStyle: {
@@ -35,19 +35,18 @@ export const containerStyle = {
     marginTop: '20px',
   },
   inputStyle: {
-    color: 'blue',
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+    color: 'yellow',
+    fontWeight: 'bold',
     width: '18rem',
-    margin: '5px 10px 5px 10px',
+    marginBottom: '10px',
+    // margin: '5px 10px 5px 10px',
   },
 
   buttonStyle: {
     background: ' white ',
     // border: '1px solid white',
     borderRadius: '25px',
-    border: '1px solid blue',
+    border: '1px solid red',
     width: '12rem',
     fontWeight: 'bold',
     padding: '10px 10px 10px 10px',

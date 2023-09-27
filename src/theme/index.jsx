@@ -1,5 +1,3 @@
-// theme.js
-
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -28,7 +26,6 @@ const theme = createTheme({
       light: '#E67A37',
       contrastText: '#fff',
     },
-
     secondary: {
       main: '#E63319',
       dark: '#E63319',

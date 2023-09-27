@@ -52,6 +52,7 @@ export const loginUser =
         dispatch(setTemporaryPassword(userData.user.isTemporaryPassword));
 
         dispatch(loginSuccess(userData));
+        console.log('User logged in successfully', userData);
       } else {
         const errorData = await response.json();
         dispatch(loginFailure(errorData.message));

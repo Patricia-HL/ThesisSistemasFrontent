@@ -4,14 +4,12 @@ import {
   Route,
   Switch,
   Redirect,
-  useHistory,
 } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import LayoutPage from './Layouts/LayoutPage';
 import LayoutDashboard from './Layouts/LayoutDashboard';
 import ChangePasswordInitial from './pages/dashboard-pages/auth/ChangePasswordInitial';
 import { publicRoutes, privateRoutes } from './routes';
-import { setTemporaryPassword } from './redux/authActions/loginActions'; // Importa la acción para establecer isTemporaryPassword
 
 const renderRoutes = (routes) => {
   return routes.map((route) => {

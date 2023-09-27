@@ -6,21 +6,16 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import PageBody from '../../../components/common/PageBody';
 import ReusableTextField from '../../../components/common/TextField';
 import ReusablePaper from '../../../components/common/ReusablePaper';
-import useNavigate from '../../../hooks/useNavigate';
-import { useDispatch, useSelector } from 'react-redux'; // Importa useSelector
+
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../../redux/authActions/loginActions';
 import useForm from '../../../hooks/useForm';
 import { containerStyle } from './signin.styles';
-import { useHistory } from 'react-router-dom';
+
+import ReusableButton from '../../../components/common/Button';
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const isTemporaryPassword = useSelector(
-    (state) => state.auth.isTemporaryPassword
-  );
-
-  // Agrega la siguiente línea para acceder al estado de auth
   const { error } = useSelector((state) => state.auth);
 
   const validationRules = {
@@ -29,13 +24,12 @@ const SignIn = () => {
       value.trim() === '' ? 'Este campo es obligatorio' : null,
   };
 
-  const { values, errors, handleChange } = useForm(
+  const { values, errors, handleChange, reset } = useForm(
     { dni: '', password: '' },
     validationRules
   );
 
   const [showPassword, setShowPassword] = useState(false);
-  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,6 +39,7 @@ const SignIn = () => {
     };
 
     await dispatch(loginUser(credentials));
+    reset(); // Restablece los valores del formulario después de iniciar sesión
   };
 
   return (
@@ -102,14 +97,14 @@ const SignIn = () => {
                       ),
                     }}
                   />
-                  {/* Muestra el mensaje de error desde el estado de Redux */}
 
-                  <Button
+                  <ReusableButton
+                    style={containerStyle.buttonStyle}
                     variant='contained'
                     type='submit'
                   >
                     Iniciar sesión
-                  </Button>
+                  </ReusableButton>
                 </Grid>
               </form>
             </Grid>

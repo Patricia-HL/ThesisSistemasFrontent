@@ -1,7 +1,6 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
-import { textFieldStyle } from './textfield.styles';
-
+import { customStyles } from './textfield.styles';
 const ReusableTextField = ({
   label,
   variant,
@@ -12,14 +11,17 @@ const ReusableTextField = ({
   helperText,
   error,
   required,
-  style,
   InputProps,
+  style, // Agregamos style como prop
 }) => {
-  const mergedStyle = textFieldStyle({ style });
+  // Combina los estilos personalizados con los estilos propios si están presentes
+  const mergedStyle = {
+    ...customStyles,
+    ...style,
+  };
 
   return (
     <TextField
-      style={mergedStyle}
       label={label}
       variant={variant}
       type={type}
@@ -29,14 +31,30 @@ const ReusableTextField = ({
       helperText={helperText}
       error={error}
       required={required}
-      InputProps={InputProps}
+      InputProps={{
+        style: {
+          ...mergedStyle,
+          '& input': mergedStyle.inputUnderlineAfter,
+          '&:hover input': mergedStyle.inputUnderlineAfter,
+          '&.Mui-focused input': mergedStyle.inputUnderlineAfter,
+        },
+        ...InputProps,
+      }}
       InputLabelProps={{
         required: false,
         style: {
-          '&::after': {
-            content: 'none',
-          },
+          ...mergedStyle.label,
+          '&.Mui-focused': mergedStyle.labelFocused,
         },
+      }}
+      sx={{
+        '& .MuiInput-underline:after': mergedStyle.inputUnderlineAfter,
+        '& .MuiOutlinedInput-root': mergedStyle.outlinedInputRoot,
+        '& .MuiOutlinedInput-notchedOutline': mergedStyle.outlinedInputFieldset,
+        '&:hover .MuiOutlinedInput-notchedOutline':
+          mergedStyle.outlinedInputFieldsetHover,
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline':
+          mergedStyle.outlinedInputFieldsetFocused,
       }}
     />
   );
