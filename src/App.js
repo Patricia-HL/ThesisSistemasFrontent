@@ -71,16 +71,19 @@ const App = () => {
               isAuthenticated={isAuthenticated}
               privateRoutes={privateRoutes}
             >
-              {renderRoutes(privateRoutes)}
-              <Redirect
-                to={!isTemporaryPassword ? '/dashboard' : '/change-password'}
-              />
+              {' '}
+              <Switch>
+                {renderRoutes(privateRoutes)}
+                <Redirect
+                  to={!isTemporaryPassword ? '/dashboard' : '/change-password'}
+                />
+              </Switch>
               {isTemporaryPassword && (
                 <Route
                   path='/change-password'
                   component={ChangePasswordInitial}
                 />
-              )}
+              )}{' '}
             </LayoutDashboard>
           </>
         ) : (
@@ -89,9 +92,12 @@ const App = () => {
               isAuthenticated={isAuthenticated}
               publicRoutes={publicRoutes}
             >
-              {renderRoutes(publicRoutes)}
+              {' '}
+              <Switch>
+                {renderRoutes(publicRoutes)}
+                <Redirect to='/about-us' />{' '}
+              </Switch>
             </LayoutPage>
-            <Redirect to='/about-us' />
           </>
         )}
       </Switch>
