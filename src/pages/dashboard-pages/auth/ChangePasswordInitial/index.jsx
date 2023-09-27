@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import ReusablePaper from '../../../../components/common/ReusablePaper';
 import { useDispatch } from 'react-redux';
@@ -40,6 +40,19 @@ const ChangePasswordInitial = () => {
         value !== values.password ? 'Las contraseñas no coinciden' : null,
     }
   );
+
+  useEffect(() => {
+    const handlePopState = () => {
+      dispatch(logout()); // Cierre de sesión al retroceder en el navegador
+      history.replace('/'); // Redirige al usuario a la página de inicio o la que desees
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [dispatch, history]);
 
   const handleCloseDialog = () => {
     dispatch(logout());
