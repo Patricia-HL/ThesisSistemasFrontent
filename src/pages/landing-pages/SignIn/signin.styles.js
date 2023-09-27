@@ -35,7 +35,7 @@ export const containerStyle = {
     marginTop: '20px',
   },
   inputStyle: {
-    color: 'yellow',
+    // color: 'yellow',
     fontWeight: 'bold',
     width: '18rem',
     marginBottom: '10px',

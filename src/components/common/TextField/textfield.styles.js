@@ -16,7 +16,7 @@ export const customStyles = {
   label: {
     color: 'white', // Color del texto del label
     '& > *': {
-      margin: '0px', // Ajusta el espaciado aquí según tus necesidades
+      margin: '10px', // Ajusta el espaciado aquí según tus necesidades
     },
   },
   labelFocused: {
