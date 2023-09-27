@@ -8,6 +8,7 @@ const initialState = {
   error: null,
   isTemporaryPassword: localStorage.getItem('isTemporaryPassword') === 'true',
   loading: false,
+  isChangingPassword: false, // Nuevo estado para controlar el proceso de cambio de contraseña
 };
 
 const authReducer = (state = initialState, action) => {
@@ -24,7 +25,7 @@ const authReducer = (state = initialState, action) => {
         user: action.payload.userData,
         isAuthenticated: true,
         isTemporaryPassword: action.payload.user.isTemporaryPassword,
-        loading: false,
+        loading: true,
         error: null,
       };
     case authTypes.LoginFailure:
@@ -33,6 +34,30 @@ const authReducer = (state = initialState, action) => {
         token: null,
         loading: false,
         error: action.payload,
+      };
+    case authTypes.SetTemporaryPassword:
+      localStorage.setItem('isTemporaryPassword', action.payload); // Actualizar isTemporaryPassword en localStorage
+      return {
+        ...state,
+        isTemporaryPassword: action.payload,
+      };
+    case authTypes.ChangeInitialPasswordRequest:
+      return {
+        ...state,
+        isChangingPassword: true, // Marca que se está iniciando el cambio de contraseña
+      };
+    case authTypes.ChangeInitialPasswordSuccess:
+      return {
+        ...state,
+        isChangingPassword: false, // Marca que el cambio de contraseña ha tenido éxito
+        isAuthenticated: true, // Puedes ajustar esto según tu lógica
+        user: action.payload.user, // Actualiza los datos del usuario si es necesario
+      };
+    case authTypes.ChangeInitialPasswordFailure:
+      return {
+        ...state,
+        isChangingPassword: false, // Marca que el cambio de contraseña ha fallado
+        error: action.payload.error, // Captura el mensaje de error
       };
     case authTypes.Logout:
       localStorage.removeItem('token');
@@ -44,12 +69,7 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: false,
         isTemporaryPassword: false, // Reiniciar a false al hacer logout
       };
-    case authTypes.SetTemporaryPassword:
-      localStorage.setItem('isTemporaryPassword', action.payload); // Actualizar isTemporaryPassword en localStorage
-      return {
-        ...state,
-        isTemporaryPassword: action.payload,
-      };
+
     default:
       return state;
   }

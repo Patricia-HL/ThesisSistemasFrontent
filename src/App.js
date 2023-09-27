@@ -35,32 +35,6 @@ const App = () => {
   const isTemporaryPassword = useSelector(
     (state) => state.auth.isTemporaryPassword
   );
-  const dispatch = useDispatch(); // Obtiene la función dispatch de Redux
-  const history = useHistory();
-
-  useEffect(() => {
-    const currentPath = history.location.pathname;
-
-    if (isAuthenticated) {
-      if (currentPath === '/login') {
-        if (isTemporaryPassword) {
-          history.replace('/change-password');
-        } else {
-          history.replace('/dashboard');
-        }
-      }
-    }
-  }, [isAuthenticated, isTemporaryPassword, history]);
-
-  // Verifica el valor de isTemporaryPassword en localStorage al cargar la aplicación
-  useEffect(() => {
-    const storedIsTemporaryPassword = localStorage.getItem(
-      'isTemporaryPassword'
-    );
-    if (storedIsTemporaryPassword) {
-      dispatch(setTemporaryPassword(storedIsTemporaryPassword === 'true'));
-    }
-  }, [dispatch]);
 
   return (
     <Router>
