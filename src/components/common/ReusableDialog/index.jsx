@@ -7,6 +7,7 @@ import {
   Button,
   Backdrop, // Importa Backdrop de Material-UI
 } from '@mui/material';
+import ReusableButton from '../Button';
 
 const ReusableDialog = ({
   open,
@@ -33,13 +34,15 @@ const ReusableDialog = ({
       <DialogContent>{content}</DialogContent>
       <DialogActions>
         {actions.map((action, index) => (
-          <Button
+          <ReusableButton
             key={index}
             onClick={action.onClick}
             color={action.color}
+            backgroundColor={action.backgroundColor}
+            {...action.props} // Aquí puedes pasar cualquier prop adicional
           >
             {action.label}
-          </Button>
+          </ReusableButton>
         ))}
       </DialogActions>
     </Dialog>

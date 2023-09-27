@@ -167,11 +167,12 @@ const ChangePasswordInitial = () => {
       label: 'Cancelar',
       onClick: handleCloseDialog,
       color: 'primary',
+      backgroundColor: 'red',
     },
     {
       label: 'Guardar',
       onClick: handleSavePassword,
-      color: 'primary',
+      color: 'secondary',
     },
   ];
 
