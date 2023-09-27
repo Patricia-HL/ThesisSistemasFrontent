@@ -8,14 +8,13 @@ import ReusableTextField from '../../../../components/common/TextField';
 const ChangePasswordInitial = () => {
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = useState(true);
-  const [password, setPassword] = useState(''); // Estado para la nueva contraseña
-  const [confirmPassword, setConfirmPassword] = useState(''); // Estado para confirmar la contraseña
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleCloseDialog = () => {
-    dispatch(logout()); // Dispara la acción de logout
+    dispatch(logout());
   };
 
-  // Manejar el cambio en los campos de contraseña y confirmación
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
@@ -24,17 +23,10 @@ const ChangePasswordInitial = () => {
     setConfirmPassword(e.target.value);
   };
 
-  // Manejar la acción de guardar contraseña
   const handleSavePassword = () => {
-    // Aquí puedes agregar la lógica para validar y guardar la contraseña
-    // Por ejemplo, puedes verificar si las contraseñas coinciden antes de guardarlas
     if (password === confirmPassword) {
-      // Realizar la acción de guardar contraseña aquí
-      // Puedes enviar una solicitud al servidor para actualizar la contraseña
-      // Una vez que la contraseña se haya guardado exitosamente, puedes cerrar el diálogo
       setOpenDialog(false);
     } else {
-      // Mostrar un mensaje de error si las contraseñas no coinciden
       alert('Las contraseñas no coinciden. Por favor, inténtalo de nuevo.');
     }
   };
@@ -65,10 +57,18 @@ const ChangePasswordInitial = () => {
     },
     {
       label: 'Guardar',
-      onClick: handleSavePassword, // Llama a la función para guardar la contraseña
+      onClick: handleSavePassword,
       color: 'primary',
     },
   ];
+
+  const containerStyle = {
+    dialogStyle: {
+      backgroundColor: 'red',
+      // Agrega tus estilos personalizados aquí
+    },
+    overlayColor: 'red', // Color de fondo del overlay
+  };
 
   return (
     <Box mt={40}>
@@ -78,6 +78,8 @@ const ChangePasswordInitial = () => {
         title='Cambiar Contraseña'
         content={dialogContent}
         actions={dialogActions}
+        style={containerStyle.dialogStyle}
+        overlayColor={containerStyle.overlayColor}
       />
     </Box>
   );
