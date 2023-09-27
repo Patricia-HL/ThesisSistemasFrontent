@@ -55,4 +55,8 @@ export const containerStyle = {
     color: ' red',
     // Otros estilos personalizados para botones
   },
+  error: {
+    backgroundColor: 'red',
+    color: 'white',
+  },
 };

@@ -20,8 +20,8 @@ const SignIn = () => {
     (state) => state.auth.isTemporaryPassword
   );
 
-  const { auth } = useSelector((state) => state);
-  const { error } = auth;
+  // Agrega la siguiente línea para acceder al estado de auth
+  const { error } = useSelector((state) => state.auth);
 
   const validationRules = {
     dni: (value) => (value.trim() === '' ? 'Este campo es obligatorio' : null),
@@ -73,11 +73,11 @@ const SignIn = () => {
             </Grid>
             <Grid item>
               <form onSubmit={handleSubmit}>
-                {error && <span>{error}</span>}
                 <Grid
                   container
                   style={containerStyle.formStyle}
                 >
+                  {error && <div style={{ color: 'red' }}>{error}</div>}
                   <ReusableTextField
                     style={containerStyle.inputStyle}
                     label='Documento de Identidad o Celular'
@@ -87,7 +87,6 @@ const SignIn = () => {
                     onChange={handleChange}
                     helperText={errors.dni}
                     error={Boolean(errors.dni)}
-                    required={true}
                   />
 
                   <ReusableTextField
@@ -99,7 +98,6 @@ const SignIn = () => {
                     onChange={handleChange}
                     helperText={errors.password}
                     error={Boolean(errors.password)}
-                    required={true}
                     InputProps={{
                       endAdornment: (
                         <IconButton
@@ -115,6 +113,7 @@ const SignIn = () => {
                       ),
                     }}
                   />
+                  {/* Muestra el mensaje de error desde el estado de Redux */}
 
                   <Button
                     variant='contained'

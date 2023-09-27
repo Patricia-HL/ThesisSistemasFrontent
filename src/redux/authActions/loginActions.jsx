@@ -12,9 +12,9 @@ export const loginSuccess = (userData) => {
   };
 };
 
-export const loginFailure = (errorMessage) => ({
+export const loginFailure = (message) => ({
   type: authTypes.LoginFailure,
-  payload: errorMessage,
+  payload: message,
 });
 
 export const setTemporaryPassword = (value) => ({
