@@ -12,10 +12,18 @@ import {
 } from '../../../../redux/authActions/changePasswordInitialActions';
 import useForm from '../../../../hooks/useForm';
 import { containerStyle } from './change_password_initial.styles.styles';
+import ReusableSnackbar from '../../../../components/common/ReusableSnackbar';
+
+import { useSelector } from 'react-redux';
+
 const ChangePasswordInitial = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [openDialog, setOpenDialog] = useState(true);
+  const { error } = useSelector((state) => state.auth);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState('error');
 
   const { values, errors, handleChange, reset } = useForm(
     {
@@ -38,26 +46,47 @@ const ChangePasswordInitial = () => {
   };
 
   const handleSavePassword = async () => {
-    if (!errors.password && !errors.newPassword && !errors.confirmPassword) {
-      dispatch(changeInitialPasswordRequest());
-      try {
-        await dispatch(
-          changeInitialPassword(values.password, values.newPassword)
-        );
-        setOpenDialog(false);
-        history.push('/dashboard');
-      } catch (error) {
-        console.error('Error al cambiar la contraseña:', error);
-        alert('Error al cambiar la contraseña. Por favor, inténtalo de nuevo.');
-      }
-    } else {
-      alert('Por favor, corrige los errores antes de guardar la contraseña.');
+    if (
+      values.password.trim() === '' ||
+      values.newPassword.trim() === '' ||
+      values.confirmPassword.trim() === ''
+    ) {
+      setSnackbarType('error');
+      setSnackbarMessage('Por favor, completa todos los campos.');
+      setSnackbarOpen(true);
+      return;
+    }
+
+    if (errors.password || errors.newPassword || errors.confirmPassword) {
+      setSnackbarType('error');
+      setSnackbarMessage(
+        'Por favor, corrige los errores antes de guardar la contraseña.'
+      );
+      setSnackbarOpen(true);
+      return;
+    }
+
+    dispatch(changeInitialPasswordRequest());
+
+    try {
+      await dispatch(
+        changeInitialPassword(values.password, values.newPassword)
+      );
+      setOpenDialog(false);
+      history.push('/dashboard');
+    } catch (error) {
+      console.error('Error al cambiar la contraseña:', error);
+      setSnackbarType('error');
+      setSnackbarMessage(
+        'Error al cambiar la contraseña. Por favor, inténtalo de nuevo.'
+      );
+      setSnackbarOpen(true);
     }
   };
 
   const dialogContent = (
     <div>
-      <p></p>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <ReusablePaper
         title='Si es tu primera vez, cambia tu contraseña:'
         style={containerStyle.paperStyle}
@@ -84,7 +113,7 @@ const ChangePasswordInitial = () => {
               style={containerStyle.inputStyle}
               label='Nueva Contraseña'
               type='password'
-              name='password'
+              name='newPassword'
               value={values.newPassword}
               onChange={handleChange}
               error={Boolean(errors.newPassword)}
@@ -119,8 +148,18 @@ const ChangePasswordInitial = () => {
     },
   ];
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <Box mt={40}>
+      <ReusableSnackbar
+        open={snackbarOpen}
+        handleClose={handleSnackbarClose}
+        message={snackbarMessage}
+        type={snackbarType}
+      />
       <ReusableDialog
         open={openDialog}
         title='Cambio de Contraseña'

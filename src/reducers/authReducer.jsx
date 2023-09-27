@@ -57,7 +57,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isChangingPassword: false, // Marca que el cambio de contraseña ha fallado
-        error: action.payload.error, // Captura el mensaje de error
+        error: action.payload, // Captura el mensaje de error
       };
     case authTypes.Logout:
       localStorage.removeItem('token');

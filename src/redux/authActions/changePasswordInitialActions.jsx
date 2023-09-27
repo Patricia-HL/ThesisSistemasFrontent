@@ -12,9 +12,9 @@ export const changeInitialPasswordSuccess = (userData) => ({
   payload: { user: userData },
 });
 
-export const changeInitialPasswordFailure = (error) => ({
+export const changeInitialPasswordFailure = (message) => ({
   type: authTypes.ChangeInitialPasswordFailure,
-  payload: { error },
+  payload: message,
 });
 export const changeInitialPassword =
   (password, newPassword) => async (dispatch) => {

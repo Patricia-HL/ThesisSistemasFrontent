@@ -1,6 +1,6 @@
 export const containerStyle = {
   dialogStyle: {
-    backgroundColor: 'red',
+    backgroundColor: '#F56A46',
     // Agrega tus estilos personalizados aquí
   },
   overlayColor: 'red', // Color de fondo del overlay
@@ -27,7 +27,7 @@ export const containerStyle = {
     alignItems: 'center',
   },
   inputStyle: {
-    color: 'yellow',
+    // color: 'yellow',
     fontWeight: 'bold',
     width: '18rem',
     marginBottom: '5px',
