@@ -33,15 +33,15 @@ const ChangePasswordInitial = () => {
     {
       password: '', // Nueva entrada para la contraseña actual
       newPassword: '',
-      confirmPassword: '',
+      // confirmPassword: '',
     },
     {
       password: (value) =>
         value.trim() === '' ? 'Este campo es obligatorio' : null,
       newPassword: (value) =>
         value.trim() === '' ? 'Este campo es obligatorio' : null,
-      confirmPassword: (value) =>
-        value !== values.password ? 'Las contraseñas no coinciden' : null,
+      // confirmPassword: (value) =>
+      //   value !== values.password ? 'Las contraseñas no coinciden' : null,
     }
   );
 
@@ -65,8 +65,8 @@ const ChangePasswordInitial = () => {
   const handleSavePassword = async () => {
     if (
       values.password.trim() === '' ||
-      values.newPassword.trim() === '' ||
-      values.confirmPassword.trim() === ''
+      values.newPassword.trim() === ''
+      // values.confirmPassword.trim() === ''
     ) {
       setSnackbarType('error');
       setSnackbarMessage('Por favor, completa todos los campos.');
@@ -145,16 +145,16 @@ const ChangePasswordInitial = () => {
               onChange={handleChange}
               error={Boolean(errors.newPassword)}
               helperText={errors.newPassword}
-            />
-            <ReusableTextField
-              style={containerStyle.inputStyle}
-              label='Confirmar Contraseña'
-              type='password'
-              name='confirmPassword'
-              value={values.confirmPassword}
-              onChange={handleChange}
-              error={Boolean(errors.confirmPassword)}
-              helperText={errors.confirmPassword}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge='end'
+                  >
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                ),
+              }}
             />
           </Grid>
         </Grid>
@@ -166,13 +166,10 @@ const ChangePasswordInitial = () => {
     {
       label: 'Cancelar',
       onClick: handleCloseDialog,
-      color: 'primary',
-      backgroundColor: 'red',
     },
     {
       label: 'Guardar',
       onClick: handleSavePassword,
-      color: 'secondary',
     },
   ];
 

@@ -39,7 +39,7 @@ const ReusableDialog = ({
             onClick={action.onClick}
             color={action.color}
             backgroundColor={action.backgroundColor}
-            {...action.props} // Aquí puedes pasar cualquier prop adicional
+            {...action.props} // Puedes pasar cualquier prop adicional aquí
           >
             {action.label}
           </ReusableButton>
