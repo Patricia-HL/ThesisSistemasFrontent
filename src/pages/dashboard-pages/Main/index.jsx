@@ -1,16 +1,16 @@
-import React from 'react';
-import PageBody from '../../../components/common/PageBody';
-import { Box, Typography, Button } from '@mui/material';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import React from "react";
+import PageBody from "../../../components/common/PageBody";
+import { Box, Typography, Button } from "@mui/material";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 const Main = () => {
   return (
     <PageBody>
       <Box>
-        <Typography variant='h6'>
-          Bienvenido a Belcorop Potosi de Esika, L'bel y Cyzonedsfdsfdsfsdf
+        <Typography variant="h6">
+          Bienvenido a Belcorp Potosi de Ésika, L'bel y Cyzone
         </Typography>
-      </Box>{' '}
+      </Box>{" "}
     </PageBody>
   );
 };

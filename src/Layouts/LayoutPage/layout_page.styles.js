@@ -1,15 +1,16 @@
 export const getCustomStyles = (theme) => {
   return {
     root: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      minHeight: '100vh',
-      width: '100%',
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      minHeight: "100vh",
+      width: "100%",
       //  backgroundColor: 'red',
     },
     appBar: {
-      backgroundColor: theme.palette.contained.main,
+      //  backgroundColor: theme.palette.contained.main,
+      backgroundColor: "red",
     },
     drawer: {
       backgroundColor: theme.palette.contained.dark,
@@ -17,13 +18,13 @@ export const getCustomStyles = (theme) => {
     sidebar: {},
 
     listItem: {
-      marginRight: '20px',
-      background: '#09FAE7',
+      marginRight: "20px",
+      background: "#09FAE7",
 
       // border: '2px solid #3EA766',
     },
     ListItemText: {
-      background: '#09FAE7',
+      background: "#09FAE7",
     },
   };
 };
