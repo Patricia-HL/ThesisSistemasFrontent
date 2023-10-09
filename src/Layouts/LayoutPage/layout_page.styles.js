@@ -6,6 +6,8 @@ export const getCustomStyles = (theme) => {
       justifyContent: "space-between",
       minHeight: "100vh",
       width: "100%",
+      backgroundImage:
+        "radial-gradient(circle at center, rgb(189, 195, 199) 0.00%,rgb(238, 39, 95) 100.00%)",
       //  backgroundColor: 'red',
     },
     appBar: {

@@ -3,7 +3,7 @@ import React from "react";
 import { Box } from "@mui/system";
 import ReusablePaper from "../../../../../components/common/ReusablePaper";
 import ReusableButton from "../../../../../components/common/Button";
-import { Typography } from "@mui/material";
+import { Typography, TextField } from "@mui/material";
 import ReusableTextField from "../../../../../components/common/TextField";
 const RoleRegister = () => {
   return (
@@ -16,6 +16,8 @@ const RoleRegister = () => {
           type="text"
           label="Alias del Rol"
         />
+        <TextField name="name" type="text" label="Registro de Rol" />
+        <input name="name" type="text" placeholder="asdasda" />
         <ReusableButton>Crear Rol</ReusableButton>
       </ReusablePaper>
     </Box>
