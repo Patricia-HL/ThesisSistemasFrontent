@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Box, Grid, IconButton } from '@mui/material';
 import ReusablePaper from '../../../../components/common/ReusablePaper';
 import { useDispatch } from 'react-redux';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useHistory } from 'react-router-dom';
@@ -33,15 +32,12 @@ const ChangePasswordInitial = () => {
     {
       password: '', // Nueva entrada para la contraseña actual
       newPassword: '',
-      // confirmPassword: '',
     },
     {
       password: (value) =>
         value.trim() === '' ? 'Este campo es obligatorio' : null,
       newPassword: (value) =>
         value.trim() === '' ? 'Este campo es obligatorio' : null,
-      // confirmPassword: (value) =>
-      //   value !== values.password ? 'Las contraseñas no coinciden' : null,
     }
   );
 
@@ -63,11 +59,7 @@ const ChangePasswordInitial = () => {
   };
 
   const handleSavePassword = async () => {
-    if (
-      values.password.trim() === '' ||
-      values.newPassword.trim() === ''
-      // values.confirmPassword.trim() === ''
-    ) {
+    if (values.password.trim() === '' || values.newPassword.trim() === '') {
       setSnackbarType('error');
       setSnackbarMessage('Por favor, completa todos los campos.');
       setSnackbarOpen(true);
@@ -103,11 +95,12 @@ const ChangePasswordInitial = () => {
 
   const dialogContent = (
     <div>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
       <ReusablePaper
         title='Si es tu primera vez, cambia tu contraseña:'
         style={containerStyle.paperStyle}
       >
+        {' '}
+        {error && <div style={{ color: 'red' }}>{error}</div>}
         <Grid
           container
           style={containerStyle.paper_content}
@@ -179,12 +172,6 @@ const ChangePasswordInitial = () => {
 
   return (
     <Box mt={40}>
-      <ReusableSnackbar
-        open={snackbarOpen}
-        handleClose={handleSnackbarClose}
-        message={snackbarMessage}
-        type={snackbarType}
-      />
       <ReusableDialog
         open={openDialog}
         title='Cambio de Contraseña'
