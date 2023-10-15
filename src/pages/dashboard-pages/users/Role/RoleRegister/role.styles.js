@@ -6,11 +6,12 @@ export const containerStyle = {
     alignItems: "center",
     justifyContent: "center",
     padding: "16px",
-    minHeight: "80vh",
+    minHeight: "100vh",
+    backgroundColor: "yellow",
   },
   paperStyle: {
     // Define aquí los estilos personalizados para el papel
-    backgroundColor: "linear-gradient(45deg, #FE6B8B 80%, #FF8E53 50%)",
+    backgroundColor: "linear-gradient(4deg, #FE6B8B 80%, #FF8E53 50%)",
     borderRadius: "10px",
   },
 
@@ -41,16 +42,16 @@ export const containerStyle = {
     marginBottom: "10px",
     //margin-bottom
     backgroundImage:
-      "radial-gradient(circle at center, rgb(189, 195, 40) 0.00%,rgb(255, 0, 65) 100.00%)",
+      "radial-gradient(circle at center, rgb(189, 15, 40) 0.00%,rgb(255, 0, 65) 100.00%)",
     // margin: '5px 10px 5px 10px',
   },
 
   buttonStyle: {
-    background: " red ",
+    background: " orange",
     // border: '1px solid white',
     borderRadius: "25px",
     border: "1px solid red",
-    width: "12rem",
+    width: "11rem",
     fontWeight: "bold",
     padding: "10px 10px 10px 10px",
     margin: "20px 0 0px 0",

@@ -1,26 +1,41 @@
 import React from "react";
-
-import { Box } from "@mui/system";
 import ReusablePaper from "../../../../../components/common/ReusablePaper";
+import { Box, Grid, Typography } from "@mui/material";
 import ReusableButton from "../../../../../components/common/Button";
-import { Typography, TextField } from "@mui/material";
 import ReusableTextField from "../../../../../components/common/TextField";
+import { containerStyle } from "./role.styles";
+import PageBody from "../../../../../components/common/PageBody";
 const RoleRegister = () => {
   return (
-    <Box mt={20}>
-      <ReusablePaper>
-        <Typography variant="h6">Registro de Rol</Typography>
-        <ReusableTextField name="name" type="text" label="Registro de Rol" />
-        <ReusableTextField
-          name="alias_role"
-          type="text"
-          label="Alias del Rol"
-        />
-        <TextField name="name" type="text" label="Registro de Rol" />
-        <input name="name" type="text" placeholder="asdasda" />
-        <ReusableButton>Crear Rol</ReusableButton>
-      </ReusablePaper>
-    </Box>
+    <PageBody>
+      <Box style={containerStyle.root}>
+        <ReusablePaper style={containerStyle.paperStyle}>
+          <Grid container style={containerStyle.paper_content}>
+            <ReusableTextField
+              style={containerStyle.inputStyle}
+              label="Nombre del Permiso"
+              type="text"
+              name="dni"
+            />
+            <ReusableTextField
+              style={containerStyle.inputStyle}
+              label="Alias"
+              type="text"
+              name="name"
+            />{" "}
+            <ReusableTextField
+              style={containerStyle.inputStyle}
+              label="Alias"
+              type="text"
+              name="name"
+            />
+            <ReusableButton style={containerStyle.buttonStyle}>
+              Role Permisos
+            </ReusableButton>
+          </Grid>
+        </ReusablePaper>
+      </Box>
+    </PageBody>
   );
 };
 

@@ -1,30 +1,35 @@
 import React from "react";
 import ReusablePaper from "../../../../../components/common/ReusablePaper";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import ReusableButton from "../../../../../components/common/Button";
 import ReusableTextField from "../../../../../components/common/TextField";
 import { containerStyle } from "./permission.styles";
+import PageBody from "../../../../../components/common/PageBody";
 const PermisionRegister = () => {
   return (
-    <Box mt={20}>
-      <ReusablePaper style={containerStyle.paperStyle}>
-        <Typography variant="h6">Registro de Permiso</Typography>
-        <ReusableTextField
-          style={containerStyle.textFieldStyle}
-          name="name"
-          type="text"
-          label="Nombre del Permiso"
-        />
-        <ReusableTextField
-          name="alias_permission"
-          Type="text"
-          label="Alias del Permiso"
-        />{" "}
-        <ReusableButton style={containerStyle.buttonStyle}>
-          Crear Permiso
-        </ReusableButton>
-      </ReusablePaper>
-    </Box>
+    <PageBody>
+      <Box style={containerStyle.root}>
+        <ReusablePaper style={containerStyle.paperStyle}>
+          <Grid container style={containerStyle.paper_content}>
+            <ReusableTextField
+              style={containerStyle.inputStyle}
+              label="Nombre del Permiso"
+              type="text"
+              name="dni"
+            />
+            <ReusableTextField
+              style={containerStyle.inputStyle}
+              label="Alias"
+              type="text"
+              name="name"
+            />
+            <ReusableButton style={containerStyle.buttonStyle}>
+              Registrar Permisos
+            </ReusableButton>
+          </Grid>
+        </ReusablePaper>
+      </Box>
+    </PageBody>
   );
 };
 

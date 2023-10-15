@@ -1,48 +1,31 @@
-import React from 'react';
-import { containerStyle } from './gerencia_register.styles';
-import { Box } from '@mui/system';
-import ReusablePaper from '../../../../../components/common/ReusablePaper';
-import ReusableTextField from '../../../../../components/common/TextField';
-import ReusableButton from '../../../../../components/common/Button';
-import PageBody from '../../../../../components/common/PageBody';
-
-import { Button, Grid } from '@mui/material';
-
+import React from "react";
+import ReusablePaper from "../../../../../components/common/ReusablePaper";
+import { Box, Grid, Typography } from "@mui/material";
+import ReusableButton from "../../../../../components/common/Button";
+import ReusableTextField from "../../../../../components/common/TextField";
+import { containerStyle } from "./gerencia_register.styles";
+import PageBody from "../../../../../components/common/PageBody";
 const GerenciaRegister = () => {
   return (
     <PageBody>
       <Box style={containerStyle.root}>
         <ReusablePaper style={containerStyle.paperStyle}>
-          <Grid
-            container
-            style={containerStyle.paper_content}
-          >
+          <Grid container style={containerStyle.paper_content}>
             <ReusableTextField
-              label='Nombre'
-              type='text'
-              name='name'
+              style={containerStyle.inputStyle}
+              label="Nombre del Permiso"
+              type="text"
+              name="dni"
             />
             <ReusableTextField
-              label='Nombre'
-              type='text'
-              name='name'
+              style={containerStyle.inputStyle}
+              label="Alias"
+              type="text"
+              name="name"
             />
-            <ReusableTextField
-              label='Nombre'
-              type='text'
-              name='name'
-            />
-            <ReusableTextField
-              label='Nombre'
-              type='text'
-              name='name'
-            />
-            <ReusableTextField
-              label='Nombre'
-              type='text'
-              name='name'
-            />{' '}
-            <ReusableButton>Registrar Gerente</ReusableButton>
+            <ReusableButton style={containerStyle.buttonStyle}>
+              Registrar Permisos
+            </ReusableButton>
           </Grid>
         </ReusablePaper>
       </Box>
