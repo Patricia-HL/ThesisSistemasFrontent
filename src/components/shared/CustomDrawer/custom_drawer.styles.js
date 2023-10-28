@@ -2,7 +2,7 @@ export const getCustomStyles = (theme) => {
   return {
     drawer: {
       width: 260,
-      flexShrink: 0,
+
       // Cambia el color de fondo aquí
       [`& .MuiDrawer-paper`]: {
         width: 260,
@@ -14,13 +14,12 @@ export const getCustomStyles = (theme) => {
       backgroundColor: theme.palette.secondary.main,
 
       alignItems: 'center',
-      //padding: theme.spacing(1, 0.5, 1, .5),
-      // margin: theme.spacing(0.5, 0, 0.5, 0),
+      padding: theme.spacing(1, 0.5, 1, 0.5),
+      margin: theme.spacing(0.5, 0, 0.5, 0),
     },
     containerItems: {
       backgroundColor: theme.palette.secondary.main,
-      justifyContent: 'center',
-      alignItems: 'center',
+      position: 'relative',
     },
     title: {
       //  border: `1px solid ${theme.palette.secondary.contrastText}`,

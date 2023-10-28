@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { Link, withRouter } from 'react-router-dom'; // Importamos withRouter
-
-import ListItemIcon from '@mui/material/ListItemIcon';
-
+import { Link, withRouter } from 'react-router-dom';
 import {
   List,
   ListItem,
@@ -10,10 +7,10 @@ import {
   Collapse,
   useTheme,
 } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { getCustomStyles } from './sidebar_items.styles';
+
 const SidebarItems = ({
   items,
   history,
@@ -21,33 +18,22 @@ const SidebarItems = ({
   listStyle,
   listItemStyle,
   listItemTextStyle,
-  userRoles, // Pasa los roles del usuario como una prop
+  userRoles,
 }) => {
   const Theme = useTheme();
   const customStyles = getCustomStyles(Theme);
+  const currentPath = history.location.pathname;
 
   const [openItems, setOpenItems] = useState({});
 
-  // const shouldShowItem = (item) => {
-  //   const roles = localStorage.getItem("roles");
-  //   const userRoles = roles ? JSON.parse(roles) : [];
-
-  //   if (!item.roles || item.roles.some((role) => userRoles.includes(role))) {
-  //     return true;
-  //   }
-
-  //   return false;
-  // };
   const shouldShowItem = (item) => {
     const roles = localStorage.getItem('roles');
     const userRoles = roles ? JSON.parse(roles) : [];
 
     if (!item.roles) {
-      // Si el elemento no tiene roles definidos, mostrarlo
       return true;
     }
 
-    // Verificar si al menos uno de los roles del usuario coincide con los roles del elemento
     return item.roles.some((role) => userRoles.includes(role));
   };
 
@@ -70,58 +56,95 @@ const SidebarItems = ({
     return openItems[itemName] || false;
   };
 
+  const isItemActive = (itemRoute) => {
+    return currentPath === itemRoute;
+  };
+
   return (
     <List style={{ ...customStyles.sidebar, ...sidebarStyle }}>
-      {items
-        .filter(shouldShowItem) // Filtra las rutas que deben mostrarse
-        .map((item) => (
-          <React.Fragment key={item.name}>
-            <ListItem
-              style={{ ...customStyles.listItem, ...listItemStyle }}
-              onClick={() =>
-                handleItemClick(item.name, item.route, item.collapse)
-              }
-              component={item.route ? Link : 'button'}
-              to={item.route}
-            >
-              <ListItemText
-                primary={item.name}
-                style={{ ...customStyles.ListItemText, ...listItemTextStyle }}
-              />
-              {item.collapse && isItemOpen(item.name) ? (
-                <MoreHorizIcon />
-              ) : (
-                <MoreVertIcon />
-              )}
-            </ListItem>
-            {item.collapse && (
-              <Collapse
-                in={isItemOpen(item.name)}
-                timeout='auto'
-                unmountOnExit
+      {items.filter(shouldShowItem).map((item) => (
+        <React.Fragment key={item.name}>
+          <ListItem
+            style={{
+              ...customStyles.listItem,
+              ...listItemStyle,
+              border: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: isItemActive(item.route)
+                ? 'rgba(255, 255, 255, 0.2)'
+                : 'transparent',
+            }}
+            onClick={() =>
+              handleItemClick(item.name, item.route, item.collapse)
+            }
+            component={item.route ? Link : 'button'}
+            to={item.route}
+          >
+            {item.icon && (
+              <div
+                style={{
+                  marginRight: 10,
+                  marginLeft: -10,
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                }}
               >
-                <List disablePadding>
-                  <SidebarItems
-                    items={item.collapse}
-                    history={history}
-                    sidebarStyle={{ ...customStyles.sidebar, ...sidebarStyle }}
-                    listItemStyle={{
-                      ...customStyles.listItem,
-                      ...listItemStyle,
-                    }}
-                    listItemTextStyle={{
-                      ...customStyles.ListItemText,
-                      ...listItemTextStyle,
-                    }}
-                    userRoles={userRoles} // Pasa los roles del usuario recursivamente
-                  />
-                </List>
-              </Collapse>
+                {item.icon}
+              </div>
             )}
-          </React.Fragment>
-        ))}
+            <ListItemText
+              primary={item.name}
+              style={{
+                ...customStyles.ListItemText,
+                ...listItemTextStyle,
+                fontWeight: isItemActive(item.route) ? 'bold' : 'normal',
+              }}
+            />
+            {item.collapse &&
+              (isItemOpen(item.name) ? (
+                <ExpandLessIcon
+                  style={{
+                    color: 'white',
+                    marginLeft: 'auto',
+                  }}
+                />
+              ) : (
+                <ExpandMoreIcon
+                  style={{
+                    color: 'white',
+                    marginLeft: 'auto',
+                  }}
+                />
+              ))}
+          </ListItem>
+          {item.collapse && (
+            <Collapse
+              in={isItemOpen(item.name)}
+              timeout='auto'
+              unmountOnExit
+            >
+              <List disablePadding>
+                <SidebarItems
+                  items={item.collapse}
+                  history={history}
+                  sidebarStyle={{ paddingRight: 15, margin: 0 }}
+                  listItemStyle={{
+                    ...customStyles.listItem,
+                    ...listItemStyle,
+                  }}
+                  listItemTextStyle={{
+                    ...customStyles.ListItemText,
+                    ...listItemTextStyle,
+                  }}
+                  userRoles={userRoles}
+                />
+              </List>
+            </Collapse>
+          )}
+        </React.Fragment>
+      ))}
     </List>
   );
 };
-
-export default withRouter(SidebarItems); // Utilizamos withRouter para tener acceso a history
+export default withRouter(SidebarItems);

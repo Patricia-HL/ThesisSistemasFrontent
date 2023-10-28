@@ -10,7 +10,7 @@ const CustomDrawer = ({ open, onClose, items, isPermanent, drawerStyle }) => {
   const customStyles = getCustomStyles(Theme);
   return (
     <Box>
-      {/* Drawer visible solo en dispositivos móviles */}
+     
       <Hidden mdUp>
         <Drawer
           anchor={isPermanent ? 'left' : 'right'}
@@ -20,6 +20,7 @@ const CustomDrawer = ({ open, onClose, items, isPermanent, drawerStyle }) => {
             sx: {
               ...customStyles.drawer, // Estilo personalizado de customStyles
               ...drawerStyle, // Estilo personalizado de drawerStyle
+           
             },
           }}
         >

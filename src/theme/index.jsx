@@ -46,14 +46,13 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Arial, sans-serif', // Cambia la familia de fuentes según tus necesidades
+    fontFamily: '"Segoe UI", Arial, sans-serif', // Cambia la familia de fuentes según tus necesidades
+    fontWeight: 'bold', // Establecer el peso de la fuente en negrita por defecto
     h1: {
-      fontSize: '2rem', // Puedes definir diferentes estilos de tipografía para los elementos h1, h2, h3, etc.
-      fontWeight: 500,
+      fontSize: '10rem',
     },
     body1: {
       fontSize: '1rem',
-      fontWeight: 400,
     },
   },
   breakpoints: {

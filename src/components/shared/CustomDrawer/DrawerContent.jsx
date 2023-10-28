@@ -6,21 +6,29 @@ const DrawerContent = ({ items }) => {
   const Theme = useTheme();
   const customStyles = getCustomStyles(Theme);
   return (
-    <React.Fragment>
-    <Grid
-      container
-      style={{ justifyContent: 'center', margin: '0.7rem' }}
+    <Box
+      style={{
+        overflow: 'hidden',
+        overflowY: 'auto',
+      }}
     >
-      <Typography
-        variant='h6'
-        gutterBottom
+      <Grid
+        container
+        style={{
+          justifyContent: 'center',
+          margin: '0.7rem',
+        }}
       >
-        Belcorp Potosí
-      </Typography>
-    </Grid>
-    <Divider />
-    {items}
-  </React.Fragment>
+        <Typography
+          variant='h6'
+          gutterBottom
+        >
+          Belcorp Potosí
+        </Typography>
+      </Grid>
+      <Divider />
+      {items}
+    </Box>
   );
 };
 

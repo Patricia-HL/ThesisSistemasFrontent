@@ -79,6 +79,9 @@ const LayoutDashboard = ({ isAuthenticated, privateRoutes, children }) => {
             <SidebarItems
               items={privateRoutes} // Pasa las rutas privadas a SidebarItems
               onItemClick={() => setIsDrawerOpen(false)}
+              sidebarStyle={customStyles.sidebarStyle} // Estilos para el elemento Sidebar
+              listItemStyle={customStyles.listItemStyle} // Estilos para el elemento List
+              listItemTextStyle={customStyles.listItemTextStyle} // Estilos para el elemento ListItemTex
             />
           </React.Fragment>
         }
