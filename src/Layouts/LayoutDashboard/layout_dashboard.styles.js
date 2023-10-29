@@ -30,19 +30,19 @@ export const getCustomStyles = (theme) => {
     },
     sidebarStyle: {
       width: 260, // Ancho del ListItem dentro del collapse
-
+      paddingRight: '10px',
       borderRadius: '8px', // Borde redondeado
       cursor: 'pointer',
       // border: '1px solid #ddd', // Borde del ListItem dentro del collapse
     },
     listItemStyle: {
       backgroundColor: theme.palette.contained.dark,
-
+      paddingRight: '10px',
       borderRadius: '8px', // Estilo del borde redondeado
       marginBottom: '4px', // Espaciado entre elementos
     },
     listItemTextStyle: {
-      color: theme.palette.secondary.textContrast, // Utilizando colores del theme de Material-UI
+      color: '#333333',
 
       '&:hover': {
         color: theme.palette.secondary.dark,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import {
   List,
@@ -10,12 +10,13 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { getCustomStyles } from './sidebar_items.styles';
+import useSidebarItemState from '../../../hooks/useSidebarItemState ';
+import { Box } from '@mui/system';
 
 const SidebarItems = ({
   items,
   history,
   sidebarStyle,
-  listStyle,
   listItemStyle,
   listItemTextStyle,
   userRoles,
@@ -23,8 +24,6 @@ const SidebarItems = ({
   const Theme = useTheme();
   const customStyles = getCustomStyles(Theme);
   const currentPath = history.location.pathname;
-
-  const [openItems, setOpenItems] = useState({});
 
   const shouldShowItem = (item) => {
     const roles = localStorage.getItem('roles');
@@ -37,47 +36,43 @@ const SidebarItems = ({
     return item.roles.some((role) => userRoles.includes(role));
   };
 
-  const handleItemClick = (itemName, route, hasCollapse) => {
-    if (hasCollapse) {
-      setOpenItems((prevOpenItems) => ({
-        ...prevOpenItems,
-        [itemName]: !prevOpenItems[itemName],
-      }));
-    } else {
-      setOpenItems({});
+  const { toggleItem, isItemOpen, activateItem } = useSidebarItemState({});
 
-      if (route) {
-        history.push(route);
-      }
+  // ... Código omitido para brevedad
+
+  const handleItemClick = (item) => {
+    if (item.collapse) {
+      toggleItem(item.name);
+    } else if (item.route) {
+      activateItem(item.name);
+      history.push(item.route);
     }
   };
 
-  const isItemOpen = (itemName) => {
-    return openItems[itemName] || false;
-  };
-
-  const isItemActive = (itemRoute) => {
-    return currentPath === itemRoute;
-  };
+  const isItemActive = (itemRoute) => currentPath === itemRoute;
 
   return (
     <List style={{ ...customStyles.sidebar, ...sidebarStyle }}>
       {items.filter(shouldShowItem).map((item) => (
-        <React.Fragment key={item.name}>
+        <Box
+          style={{ boder: '2px solid red' }}
+          key={item.name}
+        >
           <ListItem
             style={{
-              ...customStyles.listItem,
-              ...listItemStyle,
               border: 'none',
               display: 'flex',
+              borderRadius: '3px',
+
+              marginTop: '5px',
               alignItems: 'center',
               backgroundColor: isItemActive(item.route)
-                ? 'rgba(255, 255, 255, 0.2)'
-                : 'transparent',
+                ? '#DBBCA8' // Botón con ruta activo
+                : isItemOpen(item.name)
+                ? 'lightyellow' // Botón desplegable activo (color amarillo claro)
+                : 'lightyellow', // Botón padre activo (color salmón)
             }}
-            onClick={() =>
-              handleItemClick(item.name, item.route, item.collapse)
-            }
+            onClick={() => handleItemClick(item)}
             component={item.route ? Link : 'button'}
             to={item.route}
           >
@@ -102,37 +97,24 @@ const SidebarItems = ({
               }}
             />
             {item.collapse &&
-              (isItemOpen(item.name) ? (
-                <ExpandLessIcon
-                  style={{
-                    color: 'white',
-                    marginLeft: 'auto',
-                  }}
-                />
-              ) : (
-                <ExpandMoreIcon
-                  style={{
-                    color: 'white',
-                    marginLeft: 'auto',
-                  }}
-                />
-              ))}
+              (isItemOpen(item.name) ? <ExpandLessIcon /> : <ExpandMoreIcon />)}
           </ListItem>
           {item.collapse && (
             <Collapse
               in={isItemOpen(item.name)}
               timeout='auto'
               unmountOnExit
+              style={{ backgroundColor: '#FFFFF0' }}
             >
               <List disablePadding>
                 <SidebarItems
                   items={item.collapse}
                   history={history}
-                  sidebarStyle={{ paddingRight: 15, margin: 0 }}
-                  listItemStyle={{
-                    ...customStyles.listItem,
-                    ...listItemStyle,
+                  sidebarStyle={{
+                    paddingRight: 30,
+                    borderRadius: '5px',
                   }}
+                  listItemStyle={{ ...customStyles.listItem, ...listItemStyle }}
                   listItemTextStyle={{
                     ...customStyles.ListItemText,
                     ...listItemTextStyle,
@@ -142,9 +124,10 @@ const SidebarItems = ({
               </List>
             </Collapse>
           )}
-        </React.Fragment>
+        </Box>
       ))}
     </List>
   );
 };
+
 export default withRouter(SidebarItems);

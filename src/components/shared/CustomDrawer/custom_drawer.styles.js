@@ -2,11 +2,11 @@ export const getCustomStyles = (theme) => {
   return {
     drawer: {
       width: 260,
-
+      
       // Cambia el color de fondo aquí
       [`& .MuiDrawer-paper`]: {
         width: 260,
-        backgroundColor: theme.palette.contained.dark,
+        backgroundColor: 'salmon',
       },
     },
 

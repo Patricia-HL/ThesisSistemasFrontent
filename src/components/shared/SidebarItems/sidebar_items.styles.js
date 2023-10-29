@@ -8,8 +8,7 @@ export const getCustomStyles = (theme) => {
       transition: 'all .5s', // Transición similar al primer bloque
     },
     listItem: {
-      // ... Otros estilos del listItem
-      textDecoration: 'none',
+      paddingRight: '5px',
       fontWeight: 'bold',
       fontSize: '18px',
       color: 'white',
@@ -19,12 +18,7 @@ export const getCustomStyles = (theme) => {
         color: theme.palette.secondary.dark,
         backgroundColor: 'transparent',
       },
-      '&:active': {
-        // Estilos para el estado activo
-        backgroundColor: 'blue', // Cambia a tu color deseado
-        color: 'white', // Cambia a tu color deseado
-        // Otras propiedades de estilo para el estado activo
-      },
+   
     },
     ListItemText: {
       textDecoration: 'none',
