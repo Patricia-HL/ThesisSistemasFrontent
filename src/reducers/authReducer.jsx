@@ -1,12 +1,12 @@
 // reducers/authReducer.js
-import { authTypes } from '../types/authTypes';
+import { authTypes } from "../types/authTypes";
 
 const initialState = {
-  token: localStorage.getItem('token'),
-  isAuthenticated: localStorage.getItem('token') ? true : false,
+  token: localStorage.getItem("token"),
+  isAuthenticated: localStorage.getItem("token") ? true : false,
   user: null,
   error: null,
-  isTemporaryPassword: localStorage.getItem('isTemporaryPassword') === 'true',
+  isTemporaryPassword: localStorage.getItem("isTemporaryPassword") === "true",
   loading: false,
   isChangingPassword: false, // Nuevo estado para controlar el proceso de cambio de contraseña
 };
@@ -36,7 +36,7 @@ const authReducer = (state = initialState, action) => {
         error: action.payload,
       };
     case authTypes.SetTemporaryPassword:
-      localStorage.setItem('isTemporaryPassword', action.payload); // Actualizar isTemporaryPassword en localStorage
+      localStorage.setItem("isTemporaryPassword", action.payload); // Actualizar isTemporaryPassword en localStorage
       return {
         ...state,
         isTemporaryPassword: action.payload,
@@ -49,7 +49,7 @@ const authReducer = (state = initialState, action) => {
     case authTypes.ChangeInitialPasswordSuccess:
       return {
         ...state,
-        isChangingPassword: false, // Marca que el cambio de contraseña ha tenido éxito
+        isChangingPassword: true, // Marca que el cambio de contraseña ha tenido éxito
         isAuthenticated: true, // Puedes ajustar esto según tu lógica
         user: action.payload.user, // Actualiza los datos del usuario si es necesario
       };
@@ -60,8 +60,8 @@ const authReducer = (state = initialState, action) => {
         error: action.payload, // Captura el mensaje de error
       };
     case authTypes.Logout:
-      localStorage.removeItem('token');
-      localStorage.removeItem('isTemporaryPassword'); // Remover isTemporaryPassword al hacer logout
+      localStorage.removeItem("token");
+      localStorage.removeItem("isTemporaryPassword"); // Remover isTemporaryPassword al hacer logout
       return {
         ...state,
         token: null,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -6,8 +6,8 @@ import {
   DialogActions,
   Button,
   Backdrop, // Importa Backdrop de Material-UI
-} from '@mui/material';
-import ReusableButton from '../Button';
+} from "@mui/material";
+import ReusableButton from "../Button";
 
 const ReusableDialog = ({
   open,
