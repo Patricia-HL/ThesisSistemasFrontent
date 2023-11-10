@@ -33,6 +33,7 @@ const App = () => {
   const isTemporaryPassword = useSelector(
     (state) => state.auth.isTemporaryPassword
   );
+  console.log('istemporaryPASSWORD', isTemporaryPassword);
 
   return (
     <Router>

@@ -1,281 +1,101 @@
-// import React from "react";
-// import { Box, Grid, IconButton } from "@mui/material";
-// import ReusablePaper from "../../../../components/common/ReusablePaper";
-// import { useDispatch, useSelector } from "react-redux";
-// import VisibilityIcon from "@mui/icons-material/Visibility";
-// import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-// import ReusableDialog from "../../../../components/common/ReusableDialog";
-// import ReusableTextField from "../../../../components/common/TextField";
-// import { containerStyle } from "./change_password_initial.styles.styles";
-// import { useHistory } from "react-router-dom";
-// import useForm from "../../../../hooks/useForm";
-// import { changeInitialPassword } from "../../../../redux/authActions/changePasswordInitialActions";
-// const ChangePasswordInitial = () => {
-//   const dispatch = useDispatch();
-//   const history = useHistory();
-//   const [openDialog, setOpenDialog] = React.useState(true);
-//   const [showPassword, setShowPassword] = React.useState(false);
+import React, { useState, useEffect } from 'react';
+import { Box, Grid, IconButton } from '@mui/material';
+import ReusablePaper from '../../../../components/common/ReusablePaper';
+import { useDispatch, useSelector } from 'react-redux';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ReusableDialog from '../../../../components/common/ReusableDialog';
+import ReusableTextField from '../../../../components/common/TextField';
+import { containerStyle } from './change_password_initial.styles.styles';
+import { useHistory } from 'react-router-dom';
+import useForm from '../../../../hooks/useForm';
 
-//   const { error } = useSelector((state) => state.auth);
-
-//   const { values, errors, handleChange, reset } = useForm(
-//     {
-//       password: "",
-//       newPassword: "",
-//       confirmPassword: "",
-//     },
-//     {
-//       password: (value) =>
-//         value.trim() === "" ? "Este campo es obligatorio" : "",
-//       // Agrega las reglas de validación para los campos newPassword y confirmPassword
-//       newPassword: (value) =>
-//         value.trim() === "" ? "Este campo es obligatorio" : "",
-//       confirmPassword: (value) => {
-//         if (value.trim() === "") {
-//           return "Este campo es obligatorio";
-//         } else if (value !== values.newPassword) {
-//           return "Las contraseñas no coinciden";
-//         }
-//         return "";
-//       },
-//     }
-//   );
-
-//   const handleSavePassword = async () => {
-//     if (Object.values(errors).every((error) => error === "")) {
-//       const { password, newPassword, confirmPassword } = values;
-
-//       const response = await dispatch(
-//         changeInitialPassword(password, newPassword, confirmPassword)
-//       );
-
-//       if (!response || response.payload.error) {
-//         // Si hay un error en la respuesta, manejarlo adecuadamente
-//       } else {
-//         setOpenDialog(false);
-//         history.push("/dashboard");
-//       }
-//     }
-//   };
-
-//   const dialogContent = (
-//     <div>
-//       <ReusablePaper
-//         title="Si es tu primera vez, cambia tu contraseña:"
-//         style={containerStyle.paperStyle}
-//       >
-//         {error && <div style={{ color: "red" }}>{error}</div>}
-//         <Grid container style={containerStyle.paper_content}>
-//           <Grid container style={containerStyle.formStyle}>
-//             <ReusableTextField
-//               style={containerStyle.inputStyle}
-//               label="Contraseña Actual"
-//               type={showPassword ? "text" : "password"}
-//               name="password"
-//               value={values.password}
-//               onChange={handleChange}
-//               error={Boolean(errors.password)}
-//               helperText={errors.password}
-//               InputProps={{
-//                 endAdornment: (
-//                   <IconButton
-//                     onClick={() => setShowPassword(!showPassword)}
-//                     edge="end"
-//                   >
-//                     {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-//                   </IconButton>
-//                 ),
-//               }}
-//             />
-//             <ReusableTextField
-//               style={containerStyle.inputStyle}
-//               label="Nueva Contraseña"
-//               type="password"
-//               name="newPassword"
-//               value={values.newPassword}
-//               onChange={handleChange}
-//               error={Boolean(errors.newPassword)}
-//               helperText={errors.newPassword}
-//             />
-//             <ReusableTextField
-//               style={containerStyle.inputStyle}
-//               label="Confirmar Nueva Contraseña"
-//               type="password"
-//               name="confirmPassword"
-//               value={values.confirmPassword}
-//               onChange={handleChange}
-//               error={Boolean(errors.confirmPassword)}
-//               helperText={errors.confirmPassword}
-//             />
-//           </Grid>
-//         </Grid>
-//       </ReusablePaper>
-//     </div>
-//   );
-
-//   const dialogActions = [
-//     {
-//       label: "Cancelar",
-//       onClick: () => {
-//         setOpenDialog(false);
-//         reset(); // Restablece los valores y errores al cancelar
-//       },
-//     },
-//     {
-//       label: "Guardar",
-//       onClick: handleSavePassword,
-//     },
-//   ];
-
-//   return (
-//     <Box mt={40}>
-//       <ReusableDialog
-//         open={openDialog}
-//         title="Cambio de Contraseña"
-//         content={dialogContent}
-//         actions={dialogActions}
-//         style={containerStyle.dialogStyle}
-//         overlayColor={containerStyle.overlayColor}
-//       />
-//     </Box>
-//   );
-// };
-
-// export default ChangePasswordInitial;
-import React, { useState, useEffect } from "react";
-import { Box, Grid, IconButton } from "@mui/material";
-import ReusablePaper from "../../../../components/common/ReusablePaper";
-import { useDispatch } from "react-redux";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useHistory } from "react-router-dom";
-import ReusableDialog from "../../../../components/common/ReusableDialog";
-import { logout } from "../../../../redux/authActions/loginActions";
-import ReusableTextField from "../../../../components/common/TextField";
-import {
-  changeInitialPassword,
-  changeInitialPasswordRequest,
-} from "../../../../redux/authActions/changePasswordInitialActions";
-import useForm from "../../../../hooks/useForm";
-import { containerStyle } from "./change_password_initial.styles.styles";
-import ReusableSnackbar from "../../../../components/common/ReusableSnackbar";
-
-import { useSelector } from "react-redux";
-
+import { logout } from '../../../../redux/authActions/loginActions';
+import { changeInitialPassword } from '../../../../redux/authActions/changePasswordInitialActions';
 const ChangePasswordInitial = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [openDialog, setOpenDialog] = useState(true);
-  const { error } = useSelector((state) => state.auth);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarType, setSnackbarType] = useState("error");
   const [showPassword, setShowPassword] = useState(false);
-
+  const { error } = useSelector((state) => state.auth);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const { values, errors, handleChange, reset } = useForm(
     {
-      password: "", // Nueva entrada para la contraseña actual
-      newPassword: "",
+      password: '',
+      newPassword: '',
+      confirmPassword: '', // Agregamos el campo de confirmación de contraseña
     },
     {
       password: (value) =>
-        value.trim() === "" ? "Este campo es obligatorio" : null,
+        value.trim() === '' ? 'Este campo es obligatorio' : '',
       newPassword: (value) =>
-        value.trim() === "" ? "Este campo es obligatorio" : null,
+        value.trim() === '' ? 'Este campo es obligatorio' : '',
+      confirmPassword: (value) => {
+        if (value.trim() === '') {
+          return 'Este campo es obligatorio';
+        }
+
+        return '';
+      },
     }
   );
-
   useEffect(() => {
     const handlePopState = () => {
       dispatch(logout()); // Cierre de sesión al retroceder en el navegador
-      history.replace("/"); // Redirige al usuario a la página de inicio o la que desees
+      history.replace('/'); // Redirige al usuario a la página de inicio o la que desees
     };
 
-    window.addEventListener("popstate", handlePopState);
+    window.addEventListener('popstate', handlePopState);
 
     return () => {
-      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener('popstate', handlePopState);
     };
   }, [dispatch, history]);
 
   const handleCloseDialog = () => {
     dispatch(logout());
   };
-
   const handleSavePassword = async () => {
-    if (values.password.trim() === "" || values.newPassword.trim() === "") {
-      setSnackbarType("error");
-      setSnackbarMessage("Por favor, completa todos los campos.");
-      setSnackbarOpen(true);
-      return;
-    }
+    if (Object.values(errors).every((error) => error === '')) {
+      const { password, newPassword, confirmPassword } = values;
 
-    if (errors.password || errors.newPassword || errors.confirmPassword) {
-      setSnackbarType("error");
-      setSnackbarMessage(
-        "Por favor, corrige los errores antes de guardar la contraseña."
-      );
-      setSnackbarOpen(true);
-      return;
-    }
-
-    dispatch(changeInitialPasswordRequest());
-
-    try {
-      await dispatch(
-        changeInitialPassword(values.password, values.newPassword)
-      );
-      setOpenDialog(false);
-      history.push("/dashboard");
-    } catch (error) {
-      console.error("Error al cambiar la contraseña:", error);
-      setSnackbarType("error");
-      setSnackbarMessage(
-        "Error al cambiar la contraseña. Por favor, inténtalo de nuevo."
-      );
-      setSnackbarOpen(true);
+      try {
+        await dispatch(
+          changeInitialPassword(password, newPassword, confirmPassword)
+        );
+        setOpenDialog(false);
+        history.push('/dashboard');
+      } catch (error) {
+        console.error('Error al cambiar la contraseña:', error);
+      }
     }
   };
 
   const dialogContent = (
     <div>
       <ReusablePaper
-        title="Si es tu primera vez, cambia tu contraseña:"
+        title='Si es tu primera vez, cambia tu contraseña:'
         style={containerStyle.paperStyle}
       >
-        {" "}
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        <Grid container style={containerStyle.paper_content}>
-          <Grid container style={containerStyle.formStyle}>
+        <Grid
+          container
+          style={containerStyle.paper_content}
+        >
+          <Grid
+            container
+            style={containerStyle.formStyle}
+          >
+            {' '}
+            {error && <div style={{ color: 'red' }}>{error}</div>}
             <ReusableTextField
               style={containerStyle.inputStyle}
-              label="Contraseña Actual"
-              type={showPassword ? "text" : "password"}
-              name="password"
+              label='Contraseña Actual'
+              type={showPassword ? 'text' : 'password'}
+              name='password'
               value={values.password}
               onChange={handleChange}
               error={Boolean(errors.password)}
               helperText={errors.password}
-              InputProps={{
-                endAdornment: (
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                  </IconButton>
-                ),
-              }}
-            />
-            {/* <ReusableTextField
-              style={containerStyle.inputStyle}
-              label='Nueva Contraseña'
-              type='password'
-              name='newPassword'
-              value={values.newPassword}
-              onChange={handleChange}
-              error={Boolean(errors.newPassword)}
-              helperText={errors.newPassword}
               InputProps={{
                 endAdornment: (
                   <IconButton
@@ -286,24 +106,38 @@ const ChangePasswordInitial = () => {
                   </IconButton>
                 ),
               }}
-            /> */}
+            />
             <ReusableTextField
               style={containerStyle.inputStyle}
-              label="Nueva Contraseña"
-              type="password"
-              name="newPassword"
+              label='Nueva Contraseña'
+              type={showNewPassword ? 'text' : 'password'}
+              name='newPassword'
               value={values.newPassword}
               onChange={handleChange}
               error={Boolean(errors.newPassword)}
               helperText={errors.newPassword}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    edge='end'
+                  >
+                    {showNewPassword ? (
+                      <VisibilityIcon />
+                    ) : (
+                      <VisibilityOffIcon />
+                    )}
+                  </IconButton>
+                ),
+              }}
             />
             <ReusableTextField
               style={containerStyle.inputStyle}
-              label="Confirmar Nueva Contraseña"
-              type="password"
-              name="confirmPassword"
-              value={values.confirmPassword}
-              onChange={handleChange}
+              label='Confirmar Nueva Contraseña'
+              type='password'
+              name='confirmPassword'
+              value={values.newPassword} // Asignamos el valor de la nueva contraseña
+              onChange={handleChange} // Sincronizamos el cambio con el estado
               error={Boolean(errors.confirmPassword)}
               helperText={errors.confirmPassword}
             />
@@ -315,24 +149,19 @@ const ChangePasswordInitial = () => {
 
   const dialogActions = [
     {
-      label: "Cancelar",
+      label: 'Cancelar',
       onClick: handleCloseDialog,
     },
     {
-      label: "Guardar",
+      label: 'Guardar',
       onClick: handleSavePassword,
     },
   ];
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
   return (
     <Box mt={40}>
       <ReusableDialog
         open={openDialog}
-        title="Cambio de Contraseña"
+        title='Cambio de Contraseña'
         content={dialogContent}
         actions={dialogActions}
         style={containerStyle.dialogStyle}
@@ -341,5 +170,4 @@ const ChangePasswordInitial = () => {
     </Box>
   );
 };
-
 export default ChangePasswordInitial;
