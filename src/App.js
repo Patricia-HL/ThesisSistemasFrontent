@@ -30,9 +30,12 @@ const renderRoutes = (routes) => {
 
 const App = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  console.log('isAuthenticated:', isAuthenticated);
   const isTemporaryPassword = useSelector(
     (state) => state.auth.isTemporaryPassword
   );
+
+  console.log(`isTemporaryPassword:`, isTemporaryPassword);
 
   return (
     <Router>
@@ -47,7 +50,7 @@ const App = () => {
               <Switch>
                 {renderRoutes(privateRoutes)}
                 <Redirect
-                  to={!isTemporaryPassword ? '/dashboard' : '/change-password'}
+                  to={isTemporaryPassword ? '/change-password' : '/dashboard'}
                 />
               </Switch>
               {isTemporaryPassword && (

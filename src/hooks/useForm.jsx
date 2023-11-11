@@ -35,7 +35,7 @@ const useForm = (initialValues, validationRules) => {
     values,
     errors,
     handleChange,
-
+    setErrors,
     reset, // Agrega la función reset
   };
 };

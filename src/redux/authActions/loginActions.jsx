@@ -18,8 +18,8 @@ export const loginFailure = (message) => ({
   payload: message,
 });
 
-export const setTemporaryPassword = (value) => ({
-  type: authTypes.SetTemporaryPassword,
+export const setIsTemporaryPassword = (value) => ({
+  type: authTypes.SetIsTemporaryPassword,
   payload: value,
 });
 
@@ -39,9 +39,7 @@ export const loginUser =
 
       if (response.ok) {
         const userData = await response.json();
-        const accessToken = userData.accessToken;
 
-        localStorage.setItem('token', accessToken);
         localStorage.setItem(
           'isTemporaryPassword',
           userData.user.isTemporaryPassword
@@ -49,7 +47,7 @@ export const loginUser =
 
         const roles = userData.user.roles;
         localStorage.setItem('roles', JSON.stringify(roles));
-        dispatch(setTemporaryPassword(userData.user.isTemporaryPassword));
+        dispatch(setIsTemporaryPassword(userData.user.isTemporaryPassword));
 
         dispatch(loginSuccess(userData));
         console.log('User logged in successfully', userData);
