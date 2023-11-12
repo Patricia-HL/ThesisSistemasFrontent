@@ -67,10 +67,7 @@ const App = () => {
           </>
         ) : (
           <>
-            <LayoutPage
-              isAuthenticated={isAuthenticated}
-              publicRoutes={publicRoutes}
-            >
+            <LayoutPage publicRoutes={publicRoutes}>
               {' '}
               <Switch>
                 {renderRoutes(publicRoutes)}
