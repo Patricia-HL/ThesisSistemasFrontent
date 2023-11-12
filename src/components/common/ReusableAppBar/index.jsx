@@ -18,7 +18,7 @@ import ReusableButton from '../Button';
 import { publicRoutes } from '././../../../routes';
 import CollapsiblePopover from '../CollapsiblePopover';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../../redux/authActions/loginActions';
+import { logout } from '../../../redux/authActions/authActions';
 import { getCustomStyles } from './reusable_appbar.styles'; // Importa la función getCustomStyles
 const ReusableAppBar = ({
   onMenuButtonClick,

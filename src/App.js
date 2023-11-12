@@ -4,6 +4,7 @@ import {
   Route,
   Switch,
   Redirect,
+  useLocation, // Importa useLocation de react-router-dom
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import LayoutPage from './Layouts/LayoutPage';
@@ -30,12 +31,15 @@ const renderRoutes = (routes) => {
 
 const App = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  console.log('isAuthenticated:', isAuthenticated);
+  console.log('esta autenticado?', isAuthenticated);
   const isTemporaryPassword = useSelector(
     (state) => state.auth.isTemporaryPassword
   );
+  console.log('tiene contraseña temporal?', isTemporaryPassword);
 
-  console.log(`isTemporaryPassword:`, isTemporaryPassword);
+  // Obtén la ubicación actual
+  const location = useLocation();
+  console.log('Ubicación actual:', location.pathname);
 
   return (
     <Router>

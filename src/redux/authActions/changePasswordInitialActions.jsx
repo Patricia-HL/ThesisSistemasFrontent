@@ -1,5 +1,5 @@
-import { authTypes } from "../../types/authTypes";
-import { authEndpoints } from "../../types/endPoints.jsx";
+import { authTypes } from '../../types/authTypes';
+import { authEndpoints } from '../../types/endPoints.jsx';
 
 export const changeInitialPasswordRequest = () => ({
   type: authTypes.ChangeInitialPasswordRequest,
@@ -23,7 +23,7 @@ export const changeInitialPassword =
       const response = await fetch(authEndpoints.changePasswordInitial.url, {
         method: authEndpoints.changePasswordInitial.method,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           // Agrega encabezados de autorización si son necesarios
         },
         body: JSON.stringify({ password, newPassword, confirmNewPassword }),
@@ -39,12 +39,12 @@ export const changeInitialPassword =
         console.log(errorData);
       }
     } catch (error) {
-      if (error.name === "ValidationError") {
+      if (error.name === 'ValidationError') {
         dispatch(changeInitialPasswordFailure(error.errors[0]));
       } else {
         console.error(error);
         dispatch(
-          changeInitialPasswordFailure("Error al iniciar cambio de Contraseña")
+          changeInitialPasswordFailure('Error al iniciar cambio de Contraseña')
         );
       }
     }

@@ -1,43 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, IconButton } from '@mui/material';
 import ReusablePaper from '../../../../components/common/ReusablePaper';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import ReusableDialog from '../../../../components/common/ReusableDialog';
-import ReusableTextField from '../../../../components/common/TextField';
-import { containerStyle } from './change_password_initial.styles.styles';
 import { useHistory } from 'react-router-dom';
+import ReusableDialog from '../../../../components/common/ReusableDialog';
+import { logout } from '../../../../redux/authActions/authActions';
+import ReusableTextField from '../../../../components/common/TextField';
+import {
+  changeInitialPassword,
+  changeInitialPasswordRequest,
+} from '../../../../redux/authActions/authActions';
 import useForm from '../../../../hooks/useForm';
+import { containerStyle } from './change_password_initial.styles.styles';
+import ReusableSnackbar from '../../../../components/common/ReusableSnackbar';
+import { useSelector } from 'react-redux';
 
-import { logout } from '../../../../redux/authActions/loginActions';
-import { changeInitialPassword } from '../../../../redux/authActions/changePasswordInitialActions';
-const initialFormState = {
-  password: '',
-  newPassword: '',
-  confirmPassword: '',
-};
-
-const initialFormErrors = {
-  password: '',
-  newPassword: '',
-  confirmPassword: '',
-};
 const ChangePasswordInitial = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [openDialog, setOpenDialog] = useState(true);
+  const { errorChangepasswordInitial } = useSelector((state) => state.auth);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState('error');
   const [showPassword, setShowPassword] = useState(false);
-  const { error } = useSelector((state) => state.auth);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const { values, errors, handleChange, reset, setErrors } = useForm(
-    initialFormState,
-    initialFormErrors
-  );
+  const { isTemporaryPassword } = useSelector((state) => state.auth);
+  //estado para cambiar la contraseña
+
+  const [isFirstTime, setIsFirstTime] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { values, errors, handleChange } = useForm({
+    password: '',
+    newPassword: '',
+    confirmNewPassword: '',
+  });
+
   useEffect(() => {
     const handlePopState = () => {
-      dispatch(logout()); // Cierre de sesión al retroceder en el navegador
-      history.replace('/'); // Redirige al usuario a la página de inicio o la que desees
+      dispatch(logout());
+      history.replace('/');
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -50,51 +54,64 @@ const ChangePasswordInitial = () => {
   const handleCloseDialog = () => {
     dispatch(logout());
   };
-  const validateForm = () => {
-    const newErrors = {
-      password:
-        values.password.trim() === '' ? 'Este campo es obligatorio' : '',
-      newPassword:
-        values.newPassword.trim() === '' ? 'Este campo es obligatorio' : '',
-      confirmPassword: '',
-    };
-
-    if (values.confirmPassword.trim() === '') {
-      newErrors.confirmPassword = 'Este campo es obligatorio';
-    } else if (values.confirmPassword !== values.newPassword) {
-      newErrors.confirmPassword = 'Las contraseñas noSDSD coinciden';
+  useEffect(() => {
+    console.log('PASSWORD ISTEMPORARY:', isTemporaryPassword);
+    if (isTemporaryPassword) {
+      setIsFirstTime(true);
     }
-
-    return newErrors;
-  };
+  }, [isTemporaryPassword]);
 
   const handleSavePassword = async () => {
-    // Lógica de validación de formulario usando el hook useForm
-    const newErrors = validateForm(); // Asegúrate de definir la función validateForm
-    setErrors(newErrors);
+    try {
+      setIsLoading(true);
+      const successChangePasswordInitial = dispatch(
+        changeInitialPassword(
+          values.password,
+          values.newPassword,
+          values.confirmNewPassword
+        )
+      );
+      setIsLoading(false);
+      if (successChangePasswordInitial) {
+        if (isFirstTime) {
+          setIsFirstTime(true);
+          console.log(successChangePasswordInitial);
+          localStorage.setItem('isChangingPassword', 'true');
+        }
 
-    // Si no hay errores, realiza la acción de cambio de contraseña
-    if (Object.values(newErrors).every((error) => error === '')) {
-      const { password, newPassword, confirmPassword } = values;
+        if (!isTemporaryPassword && isFirstTime) {
+          setOpenDialog(false);
+          history.replace('/dashboard');
+        }
+      }
+    } catch (error) {
+      console.error('Error al cambiar la contraseña:', error);
 
-      try {
-        await dispatch(
-          changeInitialPassword(password, newPassword, confirmPassword)
+      // Utiliza los errores del estado de Redux para mostrar el mensaje en el Snackbar
+      if (errorChangepasswordInitial) {
+        // Muestra un Snackbar de error
+        setSnackbarType('error');
+        setSnackbarMessage(errorChangepasswordInitial);
+        setSnackbarOpen(true);
+      } else {
+        // Muestra un mensaje genérico de error
+        setSnackbarType('error');
+        setSnackbarMessage(
+          'Error al cambiar la contraseña. Por favor, inténtalo de nuevo.'
         );
-        setOpenDialog(false);
-        history.push('/dashboard');
-      } catch (error) {
-        console.error('Error al cambiar la contraseña:', error);
+        setSnackbarOpen(true);
       }
     }
   };
 
-  const handleFieldChange = (e) => {
-    handleChange(e);
-    const newErrors = validateForm();
-    setErrors(newErrors);
-  };
-  console.log('error', error);
+  useEffect(() => {
+    if (errorChangepasswordInitial) {
+      setSnackbarType('error');
+      setSnackbarMessage(errorChangepasswordInitial);
+      setSnackbarOpen(true);
+    }
+  }, [errorChangepasswordInitial]);
+
   const dialogContent = (
     <div>
       <ReusablePaper
@@ -132,7 +149,7 @@ const ChangePasswordInitial = () => {
             <ReusableTextField
               style={containerStyle.inputStyle}
               label='Nueva Contraseña'
-              type={showNewPassword ? 'text' : 'password'}
+              type='password'
               name='newPassword'
               value={values.newPassword}
               onChange={handleChange}
@@ -141,30 +158,35 @@ const ChangePasswordInitial = () => {
               InputProps={{
                 endAdornment: (
                   <IconButton
-                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    onClick={() => setShowPassword(!showPassword)}
                     edge='end'
                   >
-                    {showNewPassword ? (
-                      <VisibilityIcon />
-                    ) : (
-                      <VisibilityOffIcon />
-                    )}
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 ),
               }}
             />
             <ReusableTextField
               style={containerStyle.inputStyle}
-              label='Confirmar Nueva Contraseña'
+              label='Confirmar Contraseña'
               type='password'
-              name='confirmPassword'
-              value={values.confirmPassword}
-              onChange={handleFieldChange}
-              error={Boolean(errors.confirmPassword)}
-              helperText={errors.confirmPassword}
+              name='confirmNewPassword'
+              value={values.confirmNewPassword}
+              onChange={handleChange}
+              error={Boolean(errors.confirmNewPassword)}
+              helperText={errors.confirmNewPassword}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge='end'
+                  >
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                ),
+              }}
             />
           </Grid>
-          {error && <div style={{ color: 'white' }}>{error.message}</div>}
         </Grid>
       </ReusablePaper>
     </div>
@@ -180,8 +202,19 @@ const ChangePasswordInitial = () => {
       onClick: handleSavePassword,
     },
   ];
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <Box mt={40}>
+      <ReusableSnackbar
+        open={snackbarOpen}
+        handleClose={handleSnackbarClose}
+        message={snackbarMessage}
+        type={snackbarType}
+      />
       <ReusableDialog
         open={openDialog}
         title='Cambio de Contraseña'
@@ -193,4 +226,5 @@ const ChangePasswordInitial = () => {
     </Box>
   );
 };
+
 export default ChangePasswordInitial;

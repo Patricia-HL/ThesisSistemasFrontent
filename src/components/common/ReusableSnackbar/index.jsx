@@ -14,7 +14,7 @@ const ReusableSnackbar = ({ open, handleClose, message, type }) => {
       case 'warning':
         return { backgroundColor: '#ff9800', color: '#ffffff' };
       default:
-        return { backgroundColor: '#f44336', color: '#ffffff' };
+        return { backgroundColor: '#C60000', color: '#ffffff' };
     }
   };
 
@@ -31,10 +31,13 @@ const ReusableSnackbar = ({ open, handleClose, message, type }) => {
         <IconButton
           size='small'
           aria-label='close'
-          color='inherit'
           onClick={handleClose}
+          style={{ backgroundColor: 'salmon' }}
         >
-          <CloseIcon fontSize='small' />
+          <CloseIcon
+            fontSize='small'
+            style={{ color: 'white' }}
+          />
         </IconButton>
       }
     />

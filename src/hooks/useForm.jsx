@@ -11,9 +11,9 @@ const useForm = (initialValues, validationRules) => {
       [name]: value,
     });
 
-    if (validationRules[name]) {
-      validateField(name, value);
-    }
+    // if (validationRules[name]) {
+    //   validateField(name, value);
+    // }
   };
 
   const validateField = (name, value) => {

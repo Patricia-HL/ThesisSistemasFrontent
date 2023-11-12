@@ -8,7 +8,7 @@ import ReusableTextField from '../../../components/common/TextField';
 import ReusablePaper from '../../../components/common/ReusablePaper';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../../redux/authActions/loginActions';
+import { loginUser } from '../../../redux/authActions/authActions';
 import useForm from '../../../hooks/useForm';
 import { containerStyle } from './signin.styles';
 
@@ -16,7 +16,7 @@ import ReusableButton from '../../../components/common/Button';
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.auth);
+  const { errorLogin } = useSelector((state) => state.auth);
 
   const validationRules = {
     dni: (value) => (value.trim() === '' ? 'Este campo es obligatorio' : null),
@@ -38,7 +38,7 @@ const SignIn = () => {
       password: values.password,
     };
 
-    await dispatch(loginUser(credentials));
+    dispatch(loginUser(credentials));
     reset(); // Restablece los valores del formulario después de iniciar sesión
   };
 
@@ -61,7 +61,9 @@ const SignIn = () => {
                   container
                   style={containerStyle.formStyle}
                 >
-                  {error && <div style={{ color: 'red' }}>{error}</div>}
+                  {errorLogin && (
+                    <div style={{ color: 'red' }}>{errorLogin}</div>
+                  )}
                   <ReusableTextField
                     style={containerStyle.inputStyle}
                     label='Documento de Identidad o Celular'
